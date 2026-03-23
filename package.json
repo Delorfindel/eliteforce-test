@@ -1,0 +1,18 @@
+{
+  "name": "eliteforce-multiservices-foundation",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "mobile:start": "npm --prefix mobile run start",
+    "mobile:test": "npm --prefix mobile run test",
+    "mobile:lint": "npm --prefix mobile run lint",
+    "supabase:start": "npx supabase start",
+    "supabase:stop": "npx supabase stop",
+    "supabase:reset": "npx supabase db reset",
+    "supabase:types": "npx supabase gen types typescript --local > mobile/src/types/database.types.ts",
+    "supabase:test:rls": "psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -v ON_ERROR_STOP=1 -f supabase/tests/rls.sql"
+  },
+  "devDependencies": {
+    "supabase": "2.83.0"
+  }
+}

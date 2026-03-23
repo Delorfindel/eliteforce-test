@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+
+# Dependencies
+node_modules/
+mobile/node_modules/
+
+# Env files
+.env
+.env.local
+.env.*.local
+mobile/.env
+mobile/.env.local
+
+# Expo
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/.metro-health-check*
+
+# Native / build output
+mobile/android/
+mobile/ios/
+*.log
+coverage/
+
+# Supabase local artifacts
+supabase/.branches/
+supabase/.temp/
+supabase/.stack/
+
+# Tooling
+.turbo/
