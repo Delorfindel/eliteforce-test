@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Heading, MutedText, UIText } from "@/components/ui/text";
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session";
+import { ProviderServicesManager } from "@/features/services/components/provider-services-manager";
 import { supabase } from "@/lib/supabase";
 import { ScrollView, View } from "@/tw";
 
@@ -15,6 +16,7 @@ export function ProfileScreenContent({
   onSignedOut
 }: ProfileScreenContentProps) {
   const { profile, user } = useAuthSession();
+  const isProvider = profile?.role === "provider";
 
   const signOutMutation = useMutation({
     mutationFn: async () => {
@@ -64,6 +66,10 @@ export function ProfileScreenContent({
           <UIText>{profile?.role ?? "client"}</UIText>
         </View>
       </View>
+
+      {isProvider && profile ? (
+        <ProviderServicesManager providerId={profile.id} />
+      ) : null}
 
       <Button
         loading={signOutMutation.isPending}

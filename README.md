@@ -68,6 +68,12 @@ Reset the database, apply migrations, and seed demo data:
 
 ```bash
 npm run supabase:reset
+
+The reset now seeds a local provider account you can use immediately in the
+mobile app:
+
+- Email: `prestataire.demo@eliteforce.local`
+- Password: `EliteForce123!`
 ```
 
 Generate and commit database types after any schema change:
@@ -99,9 +105,11 @@ Then scan the QR code with Expo Go or open an emulator. This foundation is desig
 - Bootstrap gate that shows a full-screen loading state until auth hydration finishes
 - Auth flow with login, registration, forgot-password, and in-app password update
 - Protected tabs shell for Home, Search, Bookings, and Profile
-- Home screen backed by seeded categories and featured services
-- Search screen with server-side filters, 400ms text debounce, and pull-to-refresh
-- Profile screen backed by the `profiles` table with sign-out handling
+- Provider-driven marketplace data model with seeded categories, provider profile, services, and reviews
+- Home screen with clickable category cards and top provider services
+- Search screen in French with compact header, category chips, filter dropdown, 400ms text debounce, and pull-to-refresh
+- Service detail screen with provider summary and seeded reviews
+- Profile screen backed by the `profiles` table, plus provider-only service management and sign-out handling
 
 ## Commands
 
@@ -139,6 +147,6 @@ Capture these after the app is running locally:
 
 ## Known limitations
 
-- The Bookings tab is a deliberate placeholder shell for future work.
-- The service catalog is seeded demo data, not live provider inventory.
+- The Bookings tab is still a deliberate placeholder shell for future work.
+- Marketplace discovery is now provider-driven, but booking creation and review submission are not implemented yet.
 - GlueStack is kept lightweight in this slice to avoid config drift against the NativeWind runtime and Expo Router shell.

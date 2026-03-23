@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { FlatList, RefreshControl } from "react-native";
 
@@ -13,11 +14,14 @@ import { useSearchFiltersStore } from "@/store/search-filters-store";
 import { View } from "@/tw";
 
 export default function SearchRoute() {
+  const router = useRouter();
+  const params = useLocalSearchParams<{ categoryId?: string }>();
   const [query, setQuery] = React.useState("");
   const categoryId = useSearchFiltersStore((state) => state.categoryId);
   const maxPrice = useSearchFiltersStore((state) => state.maxPrice);
   const minPrice = useSearchFiltersStore((state) => state.minPrice);
   const minRating = useSearchFiltersStore((state) => state.minRating);
+  const setCategoryId = useSearchFiltersStore((state) => state.setCategoryId);
 
   const categoriesQuery = useQuery({
     queryFn: listCategories,
@@ -31,14 +35,26 @@ export default function SearchRoute() {
     query
   });
 
+  React.useEffect(() => {
+    if (!params.categoryId) {
+      return;
+    }
+
+    const nextCategoryId = Number(params.categoryId);
+
+    if (!Number.isNaN(nextCategoryId)) {
+      setCategoryId(nextCategoryId);
+    }
+  }, [params.categoryId, setCategoryId]);
+
   return (
     <View className="flex-1 bg-brand-sand">
       <FlatList
         contentContainerStyle={{
-          gap: 20,
+          gap: 16,
           paddingBottom: 32,
-          paddingHorizontal: 20,
-          paddingTop: 20
+          paddingHorizontal: 16,
+          paddingTop: 12
         }}
         contentInsetAdjustmentBehavior="automatic"
         data={searchQuery.data ?? []}
@@ -47,39 +63,40 @@ export default function SearchRoute() {
           searchQuery.isLoading ? (
             <View className="items-center gap-4 py-10">
               <Spinner size="large" />
-              <MutedText>Loading services...</MutedText>
+              <MutedText>Chargement des prestations...</MutedText>
             </View>
           ) : (
             <View className="rounded-[28px] bg-brand-card p-6">
-              <Heading className="text-2xl">No matching services</Heading>
+              <Heading className="text-2xl">Aucune prestation correspondante</Heading>
               <MutedText className="mt-3 text-base leading-7">
-                Try widening the budget, lowering the minimum rating, or picking a
-                different category.
+                Essayez d&apos;élargir le budget, de baisser la note minimale ou de
+                changer de catégorie.
               </MutedText>
             </View>
           )
         }
         ListHeaderComponent={
-          <View className="gap-5">
-            <View className="gap-3">
-              <Heading>Search services</Heading>
-              <MutedText className="text-base leading-7">
-                Find active offers by keyword, category, price range, and rating.
-              </MutedText>
-            </View>
-
+          <View className="gap-3">
             <Input
               autoCapitalize="none"
               onChangeText={setQuery}
-              placeholder="Search plumbing, cleaning, moving..."
+              placeholder="Plomberie, montage de meuble, ménage..."
               value={query}
             />
 
             <SearchFilters categories={categoriesQuery.data ?? []} />
 
-            <UIText className="text-sm text-brand-ink-soft">
-              Results refresh 400ms after you stop typing, and filters refresh
-              immediately.
+            <View className="gap-1 pt-1">
+              <Heading className="text-[30px] leading-9">Recherche</Heading>
+              <MutedText className="text-sm leading-6" numberOfLines={1}>
+                Trouvez rapidement une prestation active par mot-clé, catégorie,
+                budget ou note.
+              </MutedText>
+            </View>
+
+            <UIText className="text-xs text-brand-ink-soft">
+              Les résultats se mettent à jour 400 ms après la saisie, les filtres
+              s&apos;appliquent immédiatement.
             </UIText>
           </View>
         }
@@ -92,7 +109,11 @@ export default function SearchRoute() {
         }
         renderItem={({ item }) => (
           <View className="mb-4">
-            <ServiceCard service={item} variant="list" />
+            <ServiceCard
+              onPress={() => router.push(`/services/${item.slug}`)}
+              service={item}
+              variant="list"
+            />
           </View>
         )}
         showsVerticalScrollIndicator={false}

@@ -28,7 +28,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons color={color} name="home-variant" size={size} />
           ),
-          title: "Home"
+          title: "Accueil"
         }}
       />
       <Tabs.Screen
@@ -37,7 +37,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons color={color} name="magnify" size={size} />
           ),
-          title: "Search"
+          title: "Recherche"
         }}
       />
       <Tabs.Screen

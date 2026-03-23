@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Heading, MutedText, UIText } from "@/components/ui/text";
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session";
 import { listCategories } from "@/features/services/api/list-categories";
-import { listFeaturedServices } from "@/features/services/api/list-featured-services";
+import { listTopProviderServices } from "@/features/services/api/list-top-provider-services";
 import { CategoryGrid } from "@/features/services/components/category-grid";
 import { ServiceCard } from "@/features/services/components/service-card";
 import { Pressable, ScrollView, View } from "@/tw";
@@ -19,9 +19,9 @@ export default function HomeRoute() {
     queryFn: listCategories,
     queryKey: ["service-categories"]
   });
-  const featuredQuery = useQuery({
-    queryFn: listFeaturedServices,
-    queryKey: ["featured-services"]
+  const topServicesQuery = useQuery({
+    queryFn: listTopProviderServices,
+    queryKey: ["top-provider-services"]
   });
 
   return (
@@ -32,11 +32,11 @@ export default function HomeRoute() {
     >
       <View className="gap-3">
         <MutedText className="text-sm uppercase tracking-[2px] text-brand-clay">
-          Home services marketplace
+          Marketplace de prestations
         </MutedText>
-        <Heading>{`Welcome${profile?.first_name ? `, ${profile.first_name}` : ""}`}</Heading>
+        <Heading>{`Bienvenue${profile?.first_name ? `, ${profile.first_name}` : ""}`}</Heading>
         <MutedText className="text-base leading-7">
-          Explore trusted help for the tasks that keep your home running.
+          Trouve un prestataire fiable pour les travaux du quotidien.
         </MutedText>
       </View>
 
@@ -45,32 +45,44 @@ export default function HomeRoute() {
         onPress={() => router.push("/search")}
       >
         <MutedText className="text-base">
-          Search by service, category, or budget
+          Rechercher une prestation, une categorie ou un budget
         </MutedText>
       </Pressable>
 
       <View className="gap-4">
         <View className="flex-row items-center justify-between">
-          <UIText className="text-lg font-semibold">Popular categories</UIText>
+          <UIText className="text-lg font-semibold">Categories</UIText>
           <Button className="min-h-10 px-4" onPress={() => router.push("/search")} variant="ghost">
-            View all
+            Tout voir
           </Button>
         </View>
-        <CategoryGrid categories={categoriesQuery.data ?? []} />
+        <CategoryGrid
+          categories={categoriesQuery.data ?? []}
+          onSelectCategory={(category) =>
+            router.push({
+              pathname: "/search",
+              params: { categoryId: String(category.id) }
+            })
+          }
+        />
       </View>
 
       <View className="gap-4">
         <View className="flex-row items-center justify-between">
-          <UIText className="text-lg font-semibold">Featured services</UIText>
-          <MutedText className="text-sm">Top-rated this week</MutedText>
+          <UIText className="text-lg font-semibold">Top services</UIText>
+          <MutedText className="text-sm">Les mieux notes du moment</MutedText>
         </View>
         <FlatList
-          data={featuredQuery.data ?? []}
+          data={topServicesQuery.data ?? []}
           horizontal
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <View className="mr-4">
-              <ServiceCard service={item} variant="featured" />
+              <ServiceCard
+                onPress={() => router.push(`/services/${item.slug}`)}
+                service={item}
+                variant="featured"
+              />
             </View>
           )}
           showsHorizontalScrollIndicator={false}
