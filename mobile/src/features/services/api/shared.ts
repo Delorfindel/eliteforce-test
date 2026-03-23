@@ -55,12 +55,12 @@ function mapProvider(value: NestedProviderProfile): ProviderSummary {
   const providerProfile = unwrapSingle(value);
   const profile = unwrapSingle(providerProfile?.profiles ?? null);
 
-  if (!providerProfile || !profile) {
+  if (!providerProfile) {
     throw new Error("Marketplace provider is missing.");
   }
 
-  const fullName = [profile.first_name, profile.last_name]
-    .map((segment) => segment.trim())
+  const fullName = [profile?.first_name, profile?.last_name]
+    .map((segment) => segment?.trim() ?? "")
     .filter(Boolean)
     .join(" ");
 
@@ -68,6 +68,8 @@ function mapProvider(value: NestedProviderProfile): ProviderSummary {
     avatar_url: providerProfile.avatar_url,
     bio: providerProfile.bio,
     completed_missions_count: providerProfile.completed_missions_count,
+    // `profiles` can be hidden by RLS for other users, even when the provider
+    // profile itself is visible in the marketplace.
     full_name: fullName || "Prestataire EliteForce",
     headline: providerProfile.headline,
     member_since: providerProfile.created_at,
