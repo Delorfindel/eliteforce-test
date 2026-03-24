@@ -13,10 +13,11 @@ import { Image } from '@/tw/image';
 export default function BookingsRoute() {
   const insets = useSafeAreaInsets();
   const { profile } = useAuthSession();
+  const isProvider = profile?.role === 'provider';
   const bookingsQuery = useQuery({
     enabled: Boolean(profile?.id),
-    queryFn: () => listTaskBookings(profile?.id ?? ''),
-    queryKey: ['task-bookings', profile?.id],
+    queryFn: () => listTaskBookings(profile?.id ?? '', { asProvider: isProvider }),
+    queryKey: ['task-bookings', profile?.id, isProvider ? 'provider' : 'client'],
   });
 
   return (
@@ -27,7 +28,9 @@ export default function BookingsRoute() {
       >
         <UIText className="text-[24px] font-semibold">Réservations</UIText>
         <MutedText className="mt-2 text-base">
-          Vos confirmations et rendez-vous à venir apparaissent ici.
+          {isProvider
+            ? 'Vos missions confirmées et rendez-vous clients apparaissent ici.'
+            : 'Vos confirmations et rendez-vous à venir apparaissent ici.'}
         </MutedText>
       </View>
 
@@ -51,7 +54,11 @@ export default function BookingsRoute() {
                   />
                   <View className="flex-1 gap-1">
                     <UIText className="text-[20px] font-semibold">{booking.category.name}</UIText>
-                    <MutedText className="text-sm">{booking.provider.full_name}</MutedText>
+                    <MutedText className="text-sm">
+                      {isProvider
+                        ? 'Mission réservée par un client EliteForce'
+                        : booking.provider.full_name}
+                    </MutedText>
                   </View>
                   <View className="rounded-full bg-brand-accent-light px-3 py-1.5">
                     <UIText className="text-xs font-semibold text-brand-clay">Confirmée</UIText>
@@ -93,7 +100,9 @@ export default function BookingsRoute() {
             </View>
             <UIText className="text-lg font-semibold">Aucune réservation</UIText>
             <MutedText className="text-center text-sm leading-5">
-              Vos rendez-vous et confirmations apparaîtront ici.
+              {isProvider
+                ? 'Les demandes confirmées par vos clients apparaîtront ici.'
+                : 'Vos rendez-vous et confirmations apparaîtront ici.'}
             </MutedText>
           </View>
         )}

@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Input } from '@/components/ui/input';
@@ -15,10 +15,17 @@ export default function HomeRoute() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { profile } = useAuthSession();
+  const isProvider = profile?.role === 'provider';
+
   const categoriesQuery = useQuery({
+    enabled: !isProvider,
     queryFn: listCategories,
     queryKey: ['service-categories'],
   });
+
+  if (isProvider) {
+    return <Redirect href="/bookings" />;
+  }
 
   const categories = categoriesQuery.data ?? [];
   const popularCategories = categories.slice(0, 6);

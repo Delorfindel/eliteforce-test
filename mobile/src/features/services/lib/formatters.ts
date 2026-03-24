@@ -1,6 +1,6 @@
 export function formatHourlyRate(amount: number) {
-  return new Intl.NumberFormat('fr-FR', {
-    currency: 'EUR',
+  return new Intl.NumberFormat('fr-MA', {
+    currency: 'MAD',
     style: 'currency',
   }).format(amount);
 }

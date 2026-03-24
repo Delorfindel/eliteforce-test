@@ -56,9 +56,12 @@ export const TaskerResultCard = React.memo(function TaskerResultCard({
 
           <View className="flex-row items-start gap-2">
             <MaterialCommunityIcons color="#111827" name="check-decagram" size={18} />
-            <MutedText className="flex-1 text-sm leading-5">
-              {result.category.name} : {result.completed_task_count} tasks
-            </MutedText>
+            <View className="flex-1 flex-row flex-wrap items-center gap-1">
+              <UIText className="text-sm font-semibold">{result.category.name}</UIText>
+              <MutedText className="text-sm leading-5">
+                : {result.completed_task_count} tasks
+              </MutedText>
+            </View>
           </View>
 
           <MutedText className="text-sm leading-5" numberOfLines={3}>

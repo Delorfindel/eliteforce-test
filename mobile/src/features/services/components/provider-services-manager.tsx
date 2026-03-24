@@ -1,121 +1,29 @@
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
 import React from 'react';
+import { Alert, Switch } from 'react-native';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { MutedText, UIText } from '@/components/ui/text';
-import { createProviderCategoryOffering } from '@/features/services/api/create-provider-category-offering';
+import { deleteProviderCategoryOffering } from '@/features/services/api/delete-provider-category-offering';
 import { listCategories } from '@/features/services/api/list-categories';
 import { listProviderCategoryOfferingsForCurrentUser } from '@/features/services/api/list-provider-category-offerings-for-current-user';
 import { updateProviderCategoryOffering } from '@/features/services/api/update-provider-category-offering';
 import { formatHourlyRateLabel } from '@/features/services/lib/formatters';
-import type {
-  ProviderCategoryOfferingFormValues,
-  ProviderCategoryOfferingListItem,
-  ServiceCategory,
-} from '@/features/services/types';
+import type { ProviderCategoryOfferingListItem } from '@/features/services/types';
 import { Pressable, View } from '@/tw';
 
 type ProviderServicesManagerProps = {
   providerId: string;
 };
 
-type OfferingFormProps = {
-  categories: ServiceCategory[];
-  initialOffering?: ProviderCategoryOfferingListItem | null;
-  loading: boolean;
-  onCancel: () => void;
-  onSubmit: (values: ProviderCategoryOfferingFormValues) => void;
-};
-
-function OfferingForm({
-  categories,
-  initialOffering,
-  loading,
-  onCancel,
-  onSubmit,
-}: OfferingFormProps) {
-  const [categoryId, setCategoryId] = React.useState<number>(
-    initialOffering?.category.id ?? categories[0]?.id ?? 0,
-  );
-  const [hourlyRate, setHourlyRate] = React.useState(
-    initialOffering ? String(initialOffering.hourly_rate) : '',
-  );
-  const [isActive, setIsActive] = React.useState(initialOffering?.is_active ?? true);
-
-  return (
-    <View className="gap-4 rounded-2xl border border-brand-border bg-white p-4">
-      <View className="gap-2">
-        <UIText className="text-sm font-semibold">Catégorie</UIText>
-        <View className="flex-row flex-wrap gap-2">
-          {categories.map((category) => {
-            const selected = category.id === categoryId;
-
-            return (
-              <Pressable
-                key={category.id}
-                className={`rounded-full px-4 py-2 ${selected ? 'bg-brand-clay' : 'bg-brand-sand-strong'}`}
-                onPress={() => setCategoryId(category.id)}
-              >
-                <UIText
-                  className={`text-sm font-semibold ${selected ? 'text-white' : 'text-brand-ink'}`}
-                >
-                  {category.name}
-                </UIText>
-              </Pressable>
-            );
-          })}
-        </View>
-      </View>
-
-      <View className="gap-2">
-        <UIText className="text-sm font-semibold">Tarif horaire</UIText>
-        <Input
-          keyboardType="decimal-pad"
-          onChangeText={setHourlyRate}
-          placeholder="41.85"
-          value={hourlyRate}
-        />
-      </View>
-
-      <Pressable
-        className={`rounded-2xl px-4 py-3 ${isActive ? 'bg-brand-accent-light' : 'bg-brand-sand-strong'}`}
-        onPress={() => setIsActive((current) => !current)}
-      >
-        <UIText className="text-sm font-semibold text-brand-ink">
-          {isActive ? 'Visible dans la recherche' : 'Masquée dans la recherche'}
-        </UIText>
-      </Pressable>
-
-      <View className="flex-row gap-3">
-        <Button className="flex-1" onPress={onCancel} variant="ghost">
-          Annuler
-        </Button>
-        <Button
-          className="flex-1"
-          loading={loading}
-          onPress={() =>
-            onSubmit({
-              categoryId,
-              hourlyRate: Number.parseFloat(hourlyRate || '0'),
-              isActive,
-              nextAvailableAt: null,
-            })
-          }
-        >
-          Enregistrer
-        </Button>
-      </View>
-    </View>
-  );
-}
-
 export function ProviderServicesManager({ providerId }: ProviderServicesManagerProps) {
+  const router = useRouter();
   const queryClient = useQueryClient();
-  const [isCreating, setIsCreating] = React.useState(false);
-  const [editingOffering, setEditingOffering] =
-    React.useState<ProviderCategoryOfferingListItem | null>(null);
+  const [pendingToggleId, setPendingToggleId] = React.useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = React.useState<number | null>(null);
 
   const categoriesQuery = useQuery({
     queryFn: listCategories,
@@ -135,58 +43,100 @@ export function ProviderServicesManager({ providerId }: ProviderServicesManagerP
     ]);
   }, [providerId, queryClient]);
 
-  const createMutation = useMutation({
-    mutationFn: (values: ProviderCategoryOfferingFormValues) =>
-      createProviderCategoryOffering(providerId, values),
-    onSuccess: async () => {
-      setIsCreating(false);
-      await invalidateMarketplace();
-    },
-  });
-
   const updateMutation = useMutation({
     mutationFn: ({
-      offeringId,
-      values,
+      offering,
+      isActive,
     }: {
-      offeringId: number;
-      values: ProviderCategoryOfferingFormValues;
-    }) => updateProviderCategoryOffering(offeringId, values),
-    onSuccess: async () => {
-      setEditingOffering(null);
-      await invalidateMarketplace();
+      offering: ProviderCategoryOfferingListItem;
+      isActive: boolean;
+    }) =>
+      updateProviderCategoryOffering(offering.id, {
+        categoryId: offering.category.id,
+        hourlyRate: offering.hourly_rate,
+        isActive,
+        nextAvailableAt: offering.next_available_at,
+      }),
+    onMutate: async ({ offering, isActive }) => {
+      setPendingToggleId(offering.id);
+      await queryClient.cancelQueries({ queryKey: ['provider-category-offerings', providerId] });
+
+      const previousOfferings = queryClient.getQueryData<ProviderCategoryOfferingListItem[]>([
+        'provider-category-offerings',
+        providerId,
+      ]);
+
+      queryClient.setQueryData<ProviderCategoryOfferingListItem[]>(
+        ['provider-category-offerings', providerId],
+        (current) =>
+          current?.map((item) =>
+            item.id === offering.id
+              ? {
+                  ...item,
+                  is_active: isActive,
+                }
+              : item,
+          ) ?? [],
+      );
+
+      return { previousOfferings };
     },
+    onError: (_error, _variables, context) => {
+      if (context?.previousOfferings) {
+        queryClient.setQueryData(
+          ['provider-category-offerings', providerId],
+          context.previousOfferings,
+        );
+      }
+    },
+    onSettled: () => {
+      setPendingToggleId(null);
+    },
+    onSuccess: invalidateMarketplace,
   });
 
-  const isSubmitting = createMutation.isPending || updateMutation.isPending;
-  const availableCategories = (categoriesQuery.data ?? []).filter(
-    (category) =>
-      editingOffering?.category.id === category.id ||
-      !offeringsQuery.data?.some((offering) => offering.category.id === category.id),
-  );
+  const deleteMutation = useMutation({
+    mutationFn: (offeringId: number) => deleteProviderCategoryOffering(offeringId),
+    onMutate: async (offeringId) => {
+      setPendingDeleteId(offeringId);
+      await queryClient.cancelQueries({ queryKey: ['provider-category-offerings', providerId] });
+
+      const previousOfferings = queryClient.getQueryData<ProviderCategoryOfferingListItem[]>([
+        'provider-category-offerings',
+        providerId,
+      ]);
+
+      queryClient.setQueryData<ProviderCategoryOfferingListItem[]>(
+        ['provider-category-offerings', providerId],
+        (current) => current?.filter((item) => item.id !== offeringId) ?? [],
+      );
+
+      return { previousOfferings };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previousOfferings) {
+        queryClient.setQueryData(
+          ['provider-category-offerings', providerId],
+          context.previousOfferings,
+        );
+      }
+    },
+    onSettled: () => {
+      setPendingDeleteId(null);
+    },
+    onSuccess: invalidateMarketplace,
+  });
+
+  const canAddService =
+    offeringsQuery.isLoading ||
+    categoriesQuery.isLoading ||
+    (offeringsQuery.data?.length ?? 0) < (categoriesQuery.data?.length ?? 0);
 
   return (
-    <View className="gap-4 rounded-2xl bg-brand-card p-6 shadow-sm">
-      <View className="flex-row items-start justify-between gap-3">
-        <View className="flex-1 gap-1">
-          <UIText className="text-lg font-semibold">Mes services proposés</UIText>
-          <MutedText className="text-sm leading-6">
-            Choisissez les catégories que vous proposez, fixez votre taux horaire et activez
-            seulement celles que vous souhaitez rendre visibles.
-          </MutedText>
-        </View>
-        <Button
-          className="min-h-10 px-4"
-          disabled={!editingOffering && !availableCategories.length}
-          onPress={() => {
-            setEditingOffering(null);
-            setIsCreating((current) => !current);
-          }}
-          variant={isCreating ? 'ghost' : 'primary'}
-        >
-          {isCreating ? 'Fermer' : 'Ajouter'}
-        </Button>
-      </View>
+    <View className="gap-4">
+      <Button className="w-full" disabled={!canAddService} onPress={() => router.push('/services/new')}>
+        Ajouter un service
+      </Button>
 
       {offeringsQuery.isLoading ? (
         <View className="items-center gap-3 py-6">
@@ -198,9 +148,9 @@ export function ProviderServicesManager({ providerId }: ProviderServicesManagerP
           {offeringsQuery.data.map((offering) => (
             <View
               key={offering.id}
-              className="gap-3 rounded-xl border border-brand-border bg-white p-4"
+              className="gap-4 rounded-[24px] border border-brand-border bg-white p-5"
             >
-              <View className="flex-row items-start justify-between gap-3">
+              <View className="flex-row items-start justify-between gap-4">
                 <View className="flex-1 gap-1">
                   <UIText className="text-base font-semibold">{offering.category.name}</UIText>
                   <MutedText className="text-sm">
@@ -209,89 +159,95 @@ export function ProviderServicesManager({ providerId }: ProviderServicesManagerP
                     {offering.completed_task_count > 1 ? 's' : ''} à ce jour
                   </MutedText>
                 </View>
-                <View
-                  className={`rounded-full px-3 py-1.5 ${
-                    offering.is_active ? 'bg-brand-clay' : 'bg-brand-sand-strong'
-                  }`}
-                >
-                  <UIText
-                    className={`text-xs font-semibold ${
-                      offering.is_active ? 'text-white' : 'text-brand-ink'
-                    }`}
-                  >
-                    {offering.is_active ? 'Active' : 'Masquée'}
-                  </UIText>
+                <View className="flex-row items-center gap-3">
+                  <MutedText className="text-xs font-semibold">
+                    {offering.is_active ? 'Actif' : 'Masqué'}
+                  </MutedText>
+                  <Switch
+                    disabled={Boolean(pendingDeleteId || pendingToggleId)}
+                    ios_backgroundColor="#E5E5E5"
+                    onValueChange={(value) =>
+                      updateMutation.mutate({
+                        isActive: value,
+                        offering,
+                      })
+                    }
+                    trackColor={{ false: '#E5E5E5', true: '#CDEEE3' }}
+                    thumbColor={offering.is_active ? '#0E7051' : '#FFFFFF'}
+                    value={offering.is_active}
+                  />
                 </View>
               </View>
 
-              <View className="flex-row items-center justify-between gap-3">
-                <MutedText className="text-sm">
+              <View className="flex-row items-center justify-between gap-4">
+                <UIText className="text-base font-semibold">
                   {formatHourlyRateLabel(offering.hourly_rate)}
-                </MutedText>
-                <Button
-                  className="min-h-10 px-4"
-                  onPress={() => {
-                    setIsCreating(false);
-                    setEditingOffering(offering);
-                  }}
-                  variant="ghost"
-                >
-                  Modifier
-                </Button>
+                </UIText>
+                <View className="flex-row gap-2">
+                  <Button
+                    className="min-h-10 px-4"
+                    onPress={() => router.push(`/services/${offering.id}`)}
+                    variant="ghost"
+                  >
+                    Modifier
+                  </Button>
+                  <Pressable
+                    accessibilityLabel="Supprimer le service"
+                    accessibilityRole="button"
+                    className="h-10 w-10 items-center justify-center rounded-full border border-brand-border bg-white"
+                    onPress={() =>
+                      Alert.alert(
+                        'Supprimer ce service ?',
+                        'Il sera retiré de votre profil prestataire.',
+                        [
+                          { style: 'cancel', text: 'Annuler' },
+                          {
+                            style: 'destructive',
+                            text: 'Supprimer',
+                            onPress: () => deleteMutation.mutate(offering.id),
+                          },
+                        ],
+                      )
+                    }
+                  >
+                    <MaterialCommunityIcons
+                      color="#525252"
+                      name={pendingDeleteId === offering.id && deleteMutation.isPending ? 'loading' : 'trash-can-outline'}
+                      size={18}
+                    />
+                  </Pressable>
+                </View>
               </View>
             </View>
           ))}
         </View>
       ) : (
-        <View className="rounded-xl border border-dashed border-brand-border bg-white p-4">
+        <View className="rounded-xl border border-dashed border-brand-border bg-white p-5">
           <MutedText className="text-sm leading-6">
-            Aucune catégorie active pour le moment. Ajoutez-en une pour apparaître dans la
+            Aucun service configuré pour le moment. Ajoutez-en un pour apparaître dans la
             recherche.
           </MutedText>
         </View>
       )}
 
-      {(isCreating || editingOffering) && categoriesQuery.data ? (
-        <OfferingForm
-          categories={availableCategories}
-          initialOffering={editingOffering}
-          loading={isSubmitting}
-          onCancel={() => {
-            setEditingOffering(null);
-            setIsCreating(false);
-          }}
-          onSubmit={(values) => {
-            if (editingOffering) {
-              updateMutation.mutate({
-                offeringId: editingOffering.id,
-                values,
-              });
-              return;
-            }
+      {updateMutation.error instanceof Error ? (
+        <MutedText className="text-sm text-brand-danger">{updateMutation.error.message}</MutedText>
+      ) : null}
 
-            createMutation.mutate(values);
-          }}
-        />
+      {deleteMutation.error instanceof Error ? (
+        <MutedText className="text-sm text-brand-danger">{deleteMutation.error.message}</MutedText>
+      ) : null}
+
+      {!canAddService ? (
+        <MutedText className="text-xs leading-5">
+          Toutes les catégories disponibles sont déjà configurées sur votre profil.
+        </MutedText>
       ) : null}
 
       <MutedText className="text-xs leading-5">
         Les avis et le nombre de tasks réalisées sont calculés automatiquement à partir de vos
         réservations confirmées.
       </MutedText>
-
-      {!editingOffering && !availableCategories.length ? (
-        <MutedText className="text-xs leading-5">
-          Toutes les catégories disponibles sont déjà configurées sur votre profil.
-        </MutedText>
-      ) : null}
-
-      {createMutation.error instanceof Error ? (
-        <MutedText className="text-sm text-brand-danger">{createMutation.error.message}</MutedText>
-      ) : null}
-
-      {updateMutation.error instanceof Error ? (
-        <MutedText className="text-sm text-brand-danger">{updateMutation.error.message}</MutedText>
-      ) : null}
     </View>
   );
 }

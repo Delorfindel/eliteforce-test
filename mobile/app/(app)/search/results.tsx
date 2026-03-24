@@ -180,7 +180,7 @@ export default function SearchResultsRoute() {
                         <UIText
                           className={`text-sm font-semibold ${selected ? 'text-white' : 'text-brand-ink'}`}
                         >
-                          {item === null ? 'Sans limite' : `${item} €`}
+                          {item === null ? 'Sans limite' : `${item} MAD`}
                         </UIText>
                       </Pressable>
                     );

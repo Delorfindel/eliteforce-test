@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MutedText, UIText } from '@/components/ui/text';
 import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
-import { ProviderServicesManager } from '@/features/services/components/provider-services-manager';
 import { supabase } from '@/lib/supabase';
 import { Pressable, ScrollView, View } from '@/tw';
 
@@ -65,7 +64,6 @@ function MenuItem({ icon, label, onPress, destructive }: MenuItemProps) {
 export function ProfileScreenContent({ onSignedOut }: ProfileScreenContentProps) {
   const insets = useSafeAreaInsets();
   const { profile, user } = useAuthSession();
-  const isProvider = profile?.role === 'provider';
 
   const signOutMutation = useMutation({
     mutationFn: async () => {
@@ -120,8 +118,6 @@ export function ProfileScreenContent({ onSignedOut }: ProfileScreenContentProps)
           />
         </View>
       </View>
-
-      {isProvider && profile ? <ProviderServicesManager providerId={profile.id} /> : null}
 
       <View className="rounded-2xl bg-white shadow-sm">
         <View className="px-5">

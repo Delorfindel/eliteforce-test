@@ -21,6 +21,7 @@ export async function createTaskBooking(input: CreateTaskBookingInput) {
     address_details: input.addressDetails.trim() || null,
     category_id: input.categoryId,
     client_id: input.clientId,
+    currency_code: 'MAD',
     hourly_rate: input.hourlyRate,
     notes: input.notes.trim() || null,
     offering_id: input.offeringId,
