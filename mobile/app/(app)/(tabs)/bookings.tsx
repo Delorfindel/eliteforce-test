@@ -1,8 +1,7 @@
-import React from "react";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-import { MutedText, UIText } from "@/components/ui/text";
-import { ScrollView, View } from "@/tw";
+import { MutedText, UIText } from '@/components/ui/text';
+import { ScrollView, View } from '@/tw';
 
 export default function BookingsRoute() {
   return (
@@ -17,7 +16,7 @@ export default function BookingsRoute() {
         </View>
         <UIText className="text-lg font-semibold">Aucune réservation</UIText>
         <MutedText className="text-center text-sm leading-5">
-          Vos rendez-vous et confirmations{"\n"}apparaîtront ici.
+          Vos rendez-vous et confirmations{'\n'}apparaîtront ici.
         </MutedText>
       </View>
     </ScrollView>

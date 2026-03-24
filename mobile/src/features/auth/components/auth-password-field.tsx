@@ -1,20 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import { FormControl } from "@/components/ui/form-control";
-import { Input } from "@/components/ui/input";
-import { UIText } from "@/components/ui/text";
-import { Pressable, View } from "@/tw";
+import { FormControl } from '@/components/ui/form-control';
+import { Input } from '@/components/ui/input';
+import { UIText } from '@/components/ui/text';
+import { Pressable, View } from '@/tw';
 
-type AuthPasswordFieldProps = Omit<React.ComponentProps<typeof Input>, "secureTextEntry"> & {
+type AuthPasswordFieldProps = Omit<React.ComponentProps<typeof Input>, 'secureTextEntry'> & {
   error?: string;
   label: string;
 };
 
-export function AuthPasswordField({
-  error,
-  label,
-  ...props
-}: AuthPasswordFieldProps) {
+export function AuthPasswordField({ error, label, ...props }: AuthPasswordFieldProps) {
   const [visible, setVisible] = React.useState(false);
 
   return (
@@ -27,7 +23,7 @@ export function AuthPasswordField({
           onPress={() => setVisible((current) => !current)}
         >
           <UIText className="text-sm font-semibold text-brand-clay">
-            {visible ? "Hide" : "Show"}
+            {visible ? 'Hide' : 'Show'}
           </UIText>
         </Pressable>
       </View>

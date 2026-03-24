@@ -1,32 +1,31 @@
-import type { ConfigContext, ExpoConfig } from "@expo/config";
+import type { ConfigContext, ExpoConfig } from '@expo/config';
 
-const appName =
-  process.env.EXPO_PUBLIC_APP_NAME ?? "EliteForce Multiservices";
-const appScheme = process.env.EXPO_PUBLIC_APP_SCHEME ?? "eliteforce";
+const appName = process.env.EXPO_PUBLIC_APP_NAME ?? 'EliteForce Multiservices';
+const appScheme = process.env.EXPO_PUBLIC_APP_SCHEME ?? 'eliteforce';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: appName,
-  slug: "eliteforce-multiservices",
+  slug: 'eliteforce-multiservices',
   scheme: appScheme,
-  orientation: "portrait",
-  userInterfaceStyle: "light",
+  orientation: 'portrait',
+  userInterfaceStyle: 'light',
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "com.eliteforce.multiservices"
+    bundleIdentifier: 'com.eliteforce.multiservices',
   },
   android: {
-    package: "com.eliteforce.multiservices"
+    package: 'com.eliteforce.multiservices',
   },
   web: {
-    bundler: "metro"
+    bundler: 'metro',
   },
-  plugins: ["expo-router"],
+  plugins: ['expo-router'],
   experiments: {
-    typedRoutes: true
+    typedRoutes: true,
   },
   extra: {
     appName,
-    appScheme
-  }
+    appScheme,
+  },
 });

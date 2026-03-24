@@ -1,13 +1,13 @@
-import { authMessages, normalizeAuthError } from "@/features/auth/api/errors";
-import { supabase } from "@/lib/supabase";
-import type { RegisterFormValues } from "@/features/auth/schemas/register-schema";
+import { authMessages, normalizeAuthError } from '@/features/auth/api/errors';
+import type { RegisterFormValues } from '@/features/auth/schemas/register-schema';
+import { supabase } from '@/lib/supabase';
 
 async function waitForProfile(userId: string) {
   for (let attempt = 0; attempt < 10; attempt += 1) {
     const { data, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", userId)
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
       .maybeSingle();
 
     if (error) {
@@ -35,9 +35,9 @@ export async function signUp(input: RegisterFormValues) {
         accepted_terms_at: acceptedTermsAt,
         first_name: input.firstName,
         last_name: input.lastName,
-        phone: input.phone
-      }
-    }
+        phone: input.phone,
+      },
+    },
   });
 
   if (error) {
@@ -58,6 +58,6 @@ export async function signUp(input: RegisterFormValues) {
   return {
     profile,
     session: data.session,
-    user: data.user
+    user: data.user,
   };
 }

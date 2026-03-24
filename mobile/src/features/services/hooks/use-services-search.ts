@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import { useQuery } from '@tanstack/react-query';
+import React from 'react';
 
 import {
+  type SearchProviderServicesInput,
   searchProviderServices,
-  type SearchProviderServicesInput
-} from "@/features/services/api/search-provider-services";
+} from '@/features/services/api/search-provider-services';
 
 export function useServicesSearch(input: SearchProviderServicesInput) {
   const [debouncedQuery, setDebouncedQuery] = React.useState(input.query);
@@ -20,15 +20,15 @@ export function useServicesSearch(input: SearchProviderServicesInput) {
     queryFn: () =>
       searchProviderServices({
         ...input,
-        query: debouncedQuery
+        query: debouncedQuery,
       }),
     queryKey: [
-      "services-search",
+      'services-search',
       debouncedQuery,
       input.categoryId,
       input.minPrice,
       input.maxPrice,
-      input.minRating
-    ]
+      input.minRating,
+    ],
   });
 }

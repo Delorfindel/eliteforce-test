@@ -1,73 +1,61 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import React from "react";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { MutedText, UIText } from "@/components/ui/text";
-import { listCategories } from "@/features/services/api/list-categories";
-import { createProviderService } from "@/features/services/api/create-provider-service";
-import { listProviderServicesForCurrentUser } from "@/features/services/api/list-provider-services-for-current-user";
-import { updateProviderService } from "@/features/services/api/update-provider-service";
-import { ProviderServiceForm } from "@/features/services/components/provider-service-form";
-import { formatHourlyRate } from "@/features/services/lib/formatters";
-import type {
-  ProviderServiceFormValues,
-  ProviderServiceListItem
-} from "@/features/services/types";
-import { View } from "@/tw";
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { MutedText, UIText } from '@/components/ui/text';
+import { createProviderService } from '@/features/services/api/create-provider-service';
+import { listCategories } from '@/features/services/api/list-categories';
+import { listProviderServicesForCurrentUser } from '@/features/services/api/list-provider-services-for-current-user';
+import { updateProviderService } from '@/features/services/api/update-provider-service';
+import { ProviderServiceForm } from '@/features/services/components/provider-service-form';
+import { formatHourlyRate } from '@/features/services/lib/formatters';
+import type { ProviderServiceFormValues, ProviderServiceListItem } from '@/features/services/types';
+import { View } from '@/tw';
 
 type ProviderServicesManagerProps = {
   providerId: string;
 };
 
-export function ProviderServicesManager({
-  providerId
-}: ProviderServicesManagerProps) {
+export function ProviderServicesManager({ providerId }: ProviderServicesManagerProps) {
   const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = React.useState(false);
-  const [editingService, setEditingService] =
-    React.useState<ProviderServiceListItem | null>(null);
+  const [editingService, setEditingService] = React.useState<ProviderServiceListItem | null>(null);
 
   const categoriesQuery = useQuery({
     queryFn: listCategories,
-    queryKey: ["service-categories"]
+    queryKey: ['service-categories'],
   });
   const servicesQuery = useQuery({
     enabled: Boolean(providerId),
     queryFn: () => listProviderServicesForCurrentUser(providerId),
-    queryKey: ["provider-services", providerId]
+    queryKey: ['provider-services', providerId],
   });
 
   const invalidateMarketplace = React.useCallback(async () => {
     await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["provider-services", providerId] }),
-      queryClient.invalidateQueries({ queryKey: ["top-provider-services"] }),
-      queryClient.invalidateQueries({ queryKey: ["services-search"] }),
-      queryClient.invalidateQueries({ queryKey: ["service-detail"] })
+      queryClient.invalidateQueries({ queryKey: ['provider-services', providerId] }),
+      queryClient.invalidateQueries({ queryKey: ['top-provider-services'] }),
+      queryClient.invalidateQueries({ queryKey: ['services-search'] }),
+      queryClient.invalidateQueries({ queryKey: ['service-detail'] }),
     ]);
   }, [providerId, queryClient]);
 
   const createMutation = useMutation({
-    mutationFn: (values: ProviderServiceFormValues) =>
-      createProviderService(providerId, values),
+    mutationFn: (values: ProviderServiceFormValues) => createProviderService(providerId, values),
     onSuccess: async () => {
       setIsCreating(false);
       await invalidateMarketplace();
-    }
+    },
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({
-      serviceId,
-      values
-    }: {
-      serviceId: number;
-      values: ProviderServiceFormValues;
-    }) => updateProviderService(serviceId, values),
+    mutationFn: ({ serviceId, values }: { serviceId: number; values: ProviderServiceFormValues }) =>
+      updateProviderService(serviceId, values),
     onSuccess: async () => {
       setEditingService(null);
       await invalidateMarketplace();
-    }
+    },
   });
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
@@ -87,9 +75,9 @@ export function ProviderServicesManager({
             setEditingService(null);
             setIsCreating((current) => !current);
           }}
-          variant={isCreating ? "ghost" : "primary"}
+          variant={isCreating ? 'ghost' : 'primary'}
         >
-          {isCreating ? "Fermer" : "Ajouter"}
+          {isCreating ? 'Fermer' : 'Ajouter'}
         </Button>
       </View>
 
@@ -115,23 +103,21 @@ export function ProviderServicesManager({
                 </View>
                 <View
                   className={`rounded-full px-3 py-1.5 ${
-                    service.is_active ? "bg-brand-clay" : "bg-brand-sand-strong"
+                    service.is_active ? 'bg-brand-clay' : 'bg-brand-sand-strong'
                   }`}
                 >
                   <UIText
                     className={`text-xs font-semibold ${
-                      service.is_active ? "text-white" : "text-brand-ink"
+                      service.is_active ? 'text-white' : 'text-brand-ink'
                     }`}
                   >
-                    {service.is_active ? "Active" : "Brouillon"}
+                    {service.is_active ? 'Active' : 'Brouillon'}
                   </UIText>
                 </View>
               </View>
 
               <View className="flex-row items-center justify-between gap-3">
-                <MutedText className="text-sm">
-                  {formatHourlyRate(service.hourly_rate)}
-                </MutedText>
+                <MutedText className="text-sm">{formatHourlyRate(service.hourly_rate)}</MutedText>
                 <Button
                   className="min-h-10 px-4"
                   onPress={() => {
@@ -149,8 +135,8 @@ export function ProviderServicesManager({
       ) : (
         <View className="rounded-xl border border-dashed border-brand-border bg-white p-4">
           <MutedText className="text-sm leading-6">
-            Aucune prestation enregistree pour le moment. Ajoutez-en une pour la
-            rendre visible dans la marketplace.
+            Aucune prestation enregistree pour le moment. Ajoutez-en une pour la rendre visible dans
+            la marketplace.
           </MutedText>
         </View>
       )}
@@ -168,7 +154,7 @@ export function ProviderServicesManager({
             if (editingService) {
               updateMutation.mutate({
                 serviceId: editingService.id,
-                values
+                values,
               });
               return;
             }
@@ -179,15 +165,11 @@ export function ProviderServicesManager({
       ) : null}
 
       {createMutation.error instanceof Error ? (
-        <MutedText className="text-sm text-brand-danger">
-          {createMutation.error.message}
-        </MutedText>
+        <MutedText className="text-sm text-brand-danger">{createMutation.error.message}</MutedText>
       ) : null}
 
       {updateMutation.error instanceof Error ? (
-        <MutedText className="text-sm text-brand-danger">
-          {updateMutation.error.message}
-        </MutedText>
+        <MutedText className="text-sm text-brand-danger">{updateMutation.error.message}</MutedText>
       ) : null}
     </View>
   );

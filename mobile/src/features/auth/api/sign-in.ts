@@ -1,5 +1,5 @@
-import { normalizeAuthError } from "@/features/auth/api/errors";
-import { supabase } from "@/lib/supabase";
+import { normalizeAuthError } from '@/features/auth/api/errors';
+import { supabase } from '@/lib/supabase';
 
 type SignInInput = {
   email: string;

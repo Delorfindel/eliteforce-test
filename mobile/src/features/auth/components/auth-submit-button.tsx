@@ -1,6 +1,4 @@
-import React from "react";
-
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 type AuthSubmitButtonProps = {
   disabled?: boolean;
@@ -9,12 +7,7 @@ type AuthSubmitButtonProps = {
   onPress?: () => void;
 };
 
-export function AuthSubmitButton({
-  disabled,
-  label,
-  loading,
-  onPress
-}: AuthSubmitButtonProps) {
+export function AuthSubmitButton({ disabled, label, loading, onPress }: AuthSubmitButtonProps) {
   return (
     <Button className="mt-2" disabled={disabled} loading={loading} onPress={onPress}>
       {label}

@@ -1,11 +1,10 @@
-import "react-native-gesture-handler";
-import "../global.css";
+import 'react-native-gesture-handler';
+import '../global.css';
 
-import { Stack } from "expo-router";
-import React from "react";
-import { StatusBar } from "expo-status-bar";
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
-import { AppProviders } from "@/providers/app-providers";
+import { AppProviders } from '@/providers/app-providers';
 
 export default function RootLayout() {
   return (
@@ -15,8 +14,8 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
           contentStyle: {
-            backgroundColor: "#FFFFFF"
-          }
+            backgroundColor: '#FFFFFF',
+          },
         }}
       />
     </AppProviders>

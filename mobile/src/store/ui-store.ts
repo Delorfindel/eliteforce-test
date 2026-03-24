@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { uiStorage } from "@/lib/storage";
+import { uiStorage } from '@/lib/storage';
 
-type ThemePreference = "light" | "system";
+type ThemePreference = 'light' | 'system';
 
 type UIState = {
   isAuthHydrated: boolean;
@@ -19,18 +19,18 @@ export const useUIStore = create<UIState>()(
     (set) => ({
       isAuthHydrated: false,
       searchPanelOpen: false,
-      themePreference: "light",
+      themePreference: 'light',
       setAuthHydrated: (value) => set({ isAuthHydrated: value }),
       setSearchPanelOpen: (value) => set({ searchPanelOpen: value }),
-      setThemePreference: (value) => set({ themePreference: value })
+      setThemePreference: (value) => set({ themePreference: value }),
     }),
     {
-      name: "eliteforce-ui-store",
+      name: 'eliteforce-ui-store',
       storage: createJSONStorage(() => uiStorage),
       partialize: (state) => ({
         searchPanelOpen: state.searchPanelOpen,
-        themePreference: state.themePreference
-      })
-    }
-  )
+        themePreference: state.themePreference,
+      }),
+    },
+  ),
 );

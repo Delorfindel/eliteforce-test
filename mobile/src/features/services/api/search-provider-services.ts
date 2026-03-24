@@ -1,41 +1,41 @@
-import type { SearchFilters } from "@/store/search-filters-store";
-import type { MarketplaceServiceCard } from "@/features/services/types";
-import { supabase } from "@/lib/supabase";
 import {
+  type MarketplaceServiceRow,
   mapMarketplaceServiceCard,
   marketplaceCardSelect,
-  type MarketplaceServiceRow
-} from "@/features/services/api/shared";
+} from '@/features/services/api/shared';
+import type { MarketplaceServiceCard } from '@/features/services/types';
+import { supabase } from '@/lib/supabase';
+import type { SearchFilters } from '@/store/search-filters-store';
 
 export type SearchProviderServicesInput = SearchFilters & {
   query: string;
 };
 
 export async function searchProviderServices(
-  filters: SearchProviderServicesInput
+  filters: SearchProviderServicesInput,
 ): Promise<MarketplaceServiceCard[]> {
   let query = supabase
-    .from("provider_services")
+    .from('provider_services')
     .select(marketplaceCardSelect)
-    .eq("is_active", true)
-    .gte("rating", filters.minRating)
-    .gte("hourly_rate", filters.minPrice)
-    .order("rating", { ascending: false })
-    .order("review_count", { ascending: false })
-    .order("hourly_rate", { ascending: true });
+    .eq('is_active', true)
+    .gte('rating', filters.minRating)
+    .gte('hourly_rate', filters.minPrice)
+    .order('rating', { ascending: false })
+    .order('review_count', { ascending: false })
+    .order('hourly_rate', { ascending: true });
 
   if (filters.categoryId) {
-    query = query.eq("category_id", filters.categoryId);
+    query = query.eq('category_id', filters.categoryId);
   }
 
   if (filters.maxPrice !== null) {
-    query = query.lte("hourly_rate", filters.maxPrice);
+    query = query.lte('hourly_rate', filters.maxPrice);
   }
 
   if (filters.query.trim()) {
     const searchTerm = filters.query.trim();
     query = query.or(
-      `title.ilike.%${searchTerm}%,short_description.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`
+      `title.ilike.%${searchTerm}%,short_description.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`,
     );
   }
 
@@ -45,7 +45,5 @@ export async function searchProviderServices(
     throw error;
   }
 
-  return (data ?? []).map((item) =>
-    mapMarketplaceServiceCard(item as MarketplaceServiceRow)
-  );
+  return (data ?? []).map((item) => mapMarketplaceServiceCard(item as MarketplaceServiceRow));
 }

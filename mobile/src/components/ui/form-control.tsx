@@ -1,7 +1,7 @@
-import React from "react";
+import type React from 'react';
 
-import { MutedText, UIText } from "@/components/ui/text";
-import { View } from "@/tw";
+import { MutedText, UIText } from '@/components/ui/text';
+import { View } from '@/tw';
 
 type FormControlProps = {
   children: React.ReactNode;
@@ -10,12 +10,7 @@ type FormControlProps = {
   label: string;
 };
 
-export function FormControl({
-  children,
-  error,
-  helperText,
-  label
-}: FormControlProps) {
+export function FormControl({ children, error, helperText, label }: FormControlProps) {
   return (
     <View className="gap-2">
       <UIText className="text-sm font-medium text-brand-ink">{label}</UIText>

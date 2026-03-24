@@ -1,20 +1,17 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
-import { Checkbox } from "@/components/ui/checkbox";
-import { UIText } from "@/components/ui/text";
-import { signUp } from "@/features/auth/api/sign-up";
-import { AuthErrorBanner } from "@/features/auth/components/auth-error-banner";
-import { AuthPasswordField } from "@/features/auth/components/auth-password-field";
-import { AuthSubmitButton } from "@/features/auth/components/auth-submit-button";
-import { AuthTextField } from "@/features/auth/components/auth-text-field";
-import {
-  registerSchema,
-  type RegisterFormValues
-} from "@/features/auth/schemas/register-schema";
-import { View } from "@/tw";
+import { Checkbox } from '@/components/ui/checkbox';
+import { UIText } from '@/components/ui/text';
+import { signUp } from '@/features/auth/api/sign-up';
+import { AuthErrorBanner } from '@/features/auth/components/auth-error-banner';
+import { AuthPasswordField } from '@/features/auth/components/auth-password-field';
+import { AuthSubmitButton } from '@/features/auth/components/auth-submit-button';
+import { AuthTextField } from '@/features/auth/components/auth-text-field';
+import { type RegisterFormValues, registerSchema } from '@/features/auth/schemas/register-schema';
+import { View } from '@/tw';
 
 type RegisterFormProps = {
   onSuccess: () => void;
@@ -26,25 +23,23 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const form = useForm<RegisterFormValues>({
     defaultValues: {
       acceptedTerms: false,
-      confirmPassword: "",
-      email: "",
-      firstName: "",
-      lastName: "",
-      password: "",
-      phone: ""
+      confirmPassword: '',
+      email: '',
+      firstName: '',
+      lastName: '',
+      password: '',
+      phone: '',
     },
-    mode: "onChange",
-    resolver: zodResolver(registerSchema)
+    mode: 'onChange',
+    resolver: zodResolver(registerSchema),
   });
 
   const mutation = useMutation({
     mutationFn: signUp,
     onError: (error) => {
-      setFormError(
-        error instanceof Error ? error.message : "Unable to create your account."
-      );
+      setFormError(error instanceof Error ? error.message : 'Unable to create your account.');
     },
-    onSuccess
+    onSuccess,
   });
 
   return (
@@ -179,9 +174,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
               }}
             />
             {fieldState.error?.message ? (
-              <UIText className="text-sm text-brand-danger">
-                {fieldState.error.message}
-              </UIText>
+              <UIText className="text-sm text-brand-danger">{fieldState.error.message}</UIText>
             ) : null}
           </View>
         )}

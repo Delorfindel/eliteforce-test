@@ -1,4 +1,4 @@
-import "expo-sqlite/localStorage/install";
+import 'expo-sqlite/localStorage/install';
 
 type StorageValue = string | null;
 
@@ -7,23 +7,21 @@ function createMemoryStorage() {
 
   return {
     getItem(key: string): StorageValue {
-      return store.has(key) ? store.get(key) ?? null : null;
+      return store.has(key) ? (store.get(key) ?? null) : null;
     },
     setItem(key: string, value: string) {
       store.set(key, value);
     },
     removeItem(key: string) {
       store.delete(key);
-    }
+    },
   };
 }
 
 const fallbackStorage = createMemoryStorage();
 
 const driver =
-  typeof globalThis.localStorage !== "undefined"
-    ? globalThis.localStorage
-    : fallbackStorage;
+  typeof globalThis.localStorage !== 'undefined' ? globalThis.localStorage : fallbackStorage;
 
 export const uiStorage = {
   driver,
@@ -35,5 +33,5 @@ export const uiStorage = {
   },
   removeItem(key: string) {
     driver.removeItem(key);
-  }
+  },
 };

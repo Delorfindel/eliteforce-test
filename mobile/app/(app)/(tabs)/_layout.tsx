@@ -1,6 +1,5 @@
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Tabs } from "expo-router";
-import React from "react";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Tabs } from 'expo-router';
 
 export default function TabsLayout() {
   return (
@@ -9,18 +8,18 @@ export default function TabsLayout() {
         headerShown: false,
         headerShadowVisible: false,
         headerStyle: {
-          backgroundColor: "#FFFFFF"
+          backgroundColor: '#FFFFFF',
         },
-        headerTintColor: "#0A0A0A",
+        headerTintColor: '#0A0A0A',
         sceneStyle: {
-          backgroundColor: "#FFFFFF"
+          backgroundColor: '#FFFFFF',
         },
-        tabBarActiveTintColor: "#0E7051",
-        tabBarInactiveTintColor: "#A3A3A3",
+        tabBarActiveTintColor: '#0E7051',
+        tabBarInactiveTintColor: '#A3A3A3',
         tabBarStyle: {
-          backgroundColor: "#FFFFFF",
-          borderTopColor: "#E5E5E5"
-        }
+          backgroundColor: '#FFFFFF',
+          borderTopColor: '#E5E5E5',
+        },
       }}
     >
       <Tabs.Screen
@@ -29,7 +28,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons color={color} name="home-variant" size={size} />
           ),
-          title: "Accueil"
+          title: 'Accueil',
         }}
       />
       <Tabs.Screen
@@ -38,7 +37,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons color={color} name="magnify" size={size} />
           ),
-          title: "Recherche"
+          title: 'Recherche',
         }}
       />
       <Tabs.Screen
@@ -47,7 +46,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons color={color} name="calendar-clock" size={size} />
           ),
-          title: "Réservations"
+          title: 'Réservations',
         }}
       />
       <Tabs.Screen
@@ -56,7 +55,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons color={color} name="account-circle" size={size} />
           ),
-          title: "Profil"
+          title: 'Profil',
         }}
       />
     </Tabs>

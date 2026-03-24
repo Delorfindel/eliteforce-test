@@ -1,22 +1,22 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { FormControl } from "@/components/ui/form-control";
-import { Input } from "@/components/ui/input";
-import { MutedText, UIText } from "@/components/ui/text";
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { FormControl } from '@/components/ui/form-control';
+import { Input } from '@/components/ui/input';
+import { MutedText, UIText } from '@/components/ui/text';
 import {
+  type ProviderServiceSchemaValues,
   providerServiceSchema,
-  type ProviderServiceSchemaValues
-} from "@/features/services/schemas/provider-service-schema";
+} from '@/features/services/schemas/provider-service-schema';
 import type {
   ProviderServiceFormValues,
   ProviderServiceListItem,
-  ServiceCategory
-} from "@/features/services/types";
-import { Pressable, View } from "@/tw";
+  ServiceCategory,
+} from '@/features/services/types';
+import { Pressable, View } from '@/tw';
 
 type ProviderServiceFormProps = {
   categories: ServiceCategory[];
@@ -27,28 +27,28 @@ type ProviderServiceFormProps = {
 };
 
 function buildDefaultValues(
-  initialService?: ProviderServiceListItem | null
+  initialService?: ProviderServiceListItem | null,
 ): ProviderServiceSchemaValues {
   if (!initialService) {
     return {
       categoryId: 0,
-      coverImageUrl: "",
-      description: "",
+      coverImageUrl: '',
+      description: '',
       hourlyRate: 0,
       isActive: true,
-      shortDescription: "",
-      title: ""
+      shortDescription: '',
+      title: '',
     };
   }
 
   return {
     categoryId: initialService.category.id,
-    coverImageUrl: initialService.cover_image_url ?? "",
+    coverImageUrl: initialService.cover_image_url ?? '',
     description: initialService.description,
     hourlyRate: initialService.hourly_rate,
     isActive: initialService.is_active,
     shortDescription: initialService.short_description,
-    title: initialService.title
+    title: initialService.title,
   };
 }
 
@@ -57,12 +57,12 @@ export function ProviderServiceForm({
   initialService,
   loading,
   onCancel,
-  onSubmit
+  onSubmit,
 }: ProviderServiceFormProps) {
   const form = useForm<ProviderServiceSchemaValues>({
     defaultValues: buildDefaultValues(initialService),
-    mode: "onChange",
-    resolver: zodResolver(providerServiceSchema)
+    mode: 'onChange',
+    resolver: zodResolver(providerServiceSchema),
   });
 
   React.useEffect(() => {
@@ -73,11 +73,10 @@ export function ProviderServiceForm({
     <View className="gap-4 rounded-2xl border border-brand-border bg-white p-5">
       <View className="gap-1">
         <UIText className="text-lg font-semibold text-brand-ink">
-          {initialService ? "Modifier la prestation" : "Ajouter une prestation"}
+          {initialService ? 'Modifier la prestation' : 'Ajouter une prestation'}
         </UIText>
         <MutedText className="text-sm">
-          Renseigne les informations qui seront visibles dans la recherche et sur la
-          fiche detail.
+          Renseigne les informations qui seront visibles dans la recherche et sur la fiche detail.
         </MutedText>
       </View>
 
@@ -94,15 +93,13 @@ export function ProviderServiceForm({
                   <Pressable
                     key={category.id}
                     className={`rounded-full px-4 py-2.5 ${
-                      isSelected
-                        ? "bg-brand-clay"
-                        : "bg-brand-sand-strong"
+                      isSelected ? 'bg-brand-clay' : 'bg-brand-sand-strong'
                     }`}
                     onPress={() => field.onChange(category.id)}
                   >
                     <UIText
                       className={`text-sm font-semibold ${
-                        isSelected ? "text-white" : "text-brand-ink"
+                        isSelected ? 'text-white' : 'text-brand-ink'
                       }`}
                     >
                       {category.name}
@@ -165,7 +162,7 @@ export function ProviderServiceForm({
               keyboardType="numeric"
               onBlur={field.onBlur}
               onChangeText={(value) => field.onChange(Number(value) || 0)}
-              value={field.value === 0 ? "" : String(field.value)}
+              value={field.value === 0 ? '' : String(field.value)}
             />
           </FormControl>
         )}
@@ -206,7 +203,7 @@ export function ProviderServiceForm({
 
       <View className="flex-row gap-3">
         <Button className="flex-1" loading={loading} onPress={form.handleSubmit(onSubmit)}>
-          {initialService ? "Enregistrer" : "Publier"}
+          {initialService ? 'Enregistrer' : 'Publier'}
         </Button>
         <Button className="flex-1" onPress={onCancel} variant="ghost">
           Annuler

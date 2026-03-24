@@ -1,25 +1,23 @@
-import type { ProviderServiceListItem } from "@/features/services/types";
-import { supabase } from "@/lib/supabase";
 import {
   mapProviderServiceListItem,
+  type ProviderServiceListRow,
   providerServiceListSelect,
-  type ProviderServiceListRow
-} from "@/features/services/api/shared";
+} from '@/features/services/api/shared';
+import type { ProviderServiceListItem } from '@/features/services/types';
+import { supabase } from '@/lib/supabase';
 
 export async function listProviderServicesForCurrentUser(
-  providerId: string
+  providerId: string,
 ): Promise<ProviderServiceListItem[]> {
   const { data, error } = await supabase
-    .from("provider_services")
+    .from('provider_services')
     .select(providerServiceListSelect)
-    .eq("provider_id", providerId)
-    .order("updated_at", { ascending: false });
+    .eq('provider_id', providerId)
+    .order('updated_at', { ascending: false });
 
   if (error) {
     throw error;
   }
 
-  return (data ?? []).map((item) =>
-    mapProviderServiceListItem(item as ProviderServiceListRow)
-  );
+  return (data ?? []).map((item) => mapProviderServiceListItem(item as ProviderServiceListRow));
 }

@@ -25,24 +25,24 @@ function normalizeParamValue(value: RecoveryParamValue) {
 function parseParamString(value: string) {
   const result: Partial<RecoveryParams> = {};
 
-  for (const pair of value.split("&")) {
+  for (const pair of value.split('&')) {
     if (!pair) {
       continue;
     }
 
-    const [rawKey, rawValue = ""] = pair.split("=");
-    const key = decodeURIComponent(rawKey.replace(/\+/g, " "));
-    const decodedValue = decodeURIComponent(rawValue.replace(/\+/g, " "));
+    const [rawKey, rawValue = ''] = pair.split('=');
+    const key = decodeURIComponent(rawKey.replace(/\+/g, ' '));
+    const decodedValue = decodeURIComponent(rawValue.replace(/\+/g, ' '));
 
     if (!decodedValue) {
       continue;
     }
 
     if (
-      key === "access_token" ||
-      key === "refresh_token" ||
-      key === "token_hash" ||
-      key === "type"
+      key === 'access_token' ||
+      key === 'refresh_token' ||
+      key === 'token_hash' ||
+      key === 'type'
     ) {
       result[key] = decodedValue;
     }
@@ -56,8 +56,8 @@ function parseRecoveryParamsFromUrl(url?: string) {
     return {};
   }
 
-  const queryIndex = url.indexOf("?");
-  const hashIndex = url.indexOf("#");
+  const queryIndex = url.indexOf('?');
+  const hashIndex = url.indexOf('#');
   const segments: string[] = [];
 
   if (queryIndex >= 0) {
@@ -72,23 +72,19 @@ function parseRecoveryParamsFromUrl(url?: string) {
   return segments.reduce<Partial<RecoveryParams>>(
     (accumulator, segment) => ({
       ...accumulator,
-      ...parseParamString(segment)
+      ...parseParamString(segment),
     }),
-    {}
+    {},
   );
 }
 
-export function resolveRecoveryParams(
-  params: RecoveryParamsInput,
-  url?: string
-): RecoveryParams {
+export function resolveRecoveryParams(params: RecoveryParamsInput, url?: string): RecoveryParams {
   const fallback = parseRecoveryParamsFromUrl(url);
 
   return {
     access_token: normalizeParamValue(params.access_token) ?? fallback.access_token,
-    refresh_token:
-      normalizeParamValue(params.refresh_token) ?? fallback.refresh_token,
+    refresh_token: normalizeParamValue(params.refresh_token) ?? fallback.refresh_token,
     token_hash: normalizeParamValue(params.token_hash) ?? fallback.token_hash,
-    type: normalizeParamValue(params.type) ?? fallback.type
+    type: normalizeParamValue(params.type) ?? fallback.type,
   };
 }

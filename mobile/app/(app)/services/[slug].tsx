@@ -1,26 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
-import { Stack, useLocalSearchParams } from "expo-router";
-import React from "react";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useQuery } from '@tanstack/react-query';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { Heading, MutedText, UIText } from "@/components/ui/text";
-import { getProviderServiceDetail } from "@/features/services/api/get-provider-service-detail";
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { Heading, MutedText, UIText } from '@/components/ui/text';
+import { getProviderServiceDetail } from '@/features/services/api/get-provider-service-detail';
 import {
   formatHourlyRate,
   formatJoinDate,
-  formatReviewDate
-} from "@/features/services/lib/formatters";
-import { Image } from "@/tw/image";
-import { ScrollView, View } from "@/tw";
+  formatReviewDate,
+} from '@/features/services/lib/formatters';
+import { ScrollView, View } from '@/tw';
+import { Image } from '@/tw/image';
 
 export default function ServiceDetailRoute() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const detailQuery = useQuery({
     enabled: Boolean(slug),
     queryFn: () => getProviderServiceDetail(slug),
-    queryKey: ["service-detail", slug]
+    queryKey: ['service-detail', slug],
   });
 
   const data = detailQuery.data;
@@ -29,12 +28,12 @@ export default function ServiceDetailRoute() {
     <>
       <Stack.Screen
         options={{
-          headerBackTitle: "Retour",
+          headerBackTitle: 'Retour',
           headerShadowVisible: false,
           headerShown: true,
-          headerStyle: { backgroundColor: "#FFFFFF" },
-          headerTintColor: "#0A0A0A",
-          title: ""
+          headerStyle: { backgroundColor: '#FFFFFF' },
+          headerTintColor: '#0A0A0A',
+          title: '',
         }}
       />
 
@@ -55,7 +54,7 @@ export default function ServiceDetailRoute() {
               contentFit="cover"
               source={
                 data.cover_image_url ??
-                "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+                'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80'
               }
             />
 
@@ -72,17 +71,13 @@ export default function ServiceDetailRoute() {
                     <UIText className="text-sm font-semibold text-brand-ink">
                       {data.rating.toFixed(1)}
                     </UIText>
-                    <MutedText className="text-sm">
-                      ({data.review_count} avis)
-                    </MutedText>
+                    <MutedText className="text-sm">({data.review_count} avis)</MutedText>
                   </View>
                 </View>
 
                 <Heading className="text-2xl">{data.title}</Heading>
 
-                <MutedText className="text-base leading-6">
-                  {data.short_description}
-                </MutedText>
+                <MutedText className="text-base leading-6">{data.short_description}</MutedText>
 
                 <UIText className="text-2xl font-bold text-brand-clay">
                   {formatHourlyRate(data.hourly_rate)}
@@ -97,16 +92,12 @@ export default function ServiceDetailRoute() {
                   contentFit="cover"
                   source={
                     data.provider.avatar_url ??
-                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80"
+                    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80'
                   }
                 />
                 <View className="flex-1 gap-0.5">
-                  <UIText className="text-base font-semibold">
-                    {data.provider.full_name}
-                  </UIText>
-                  <MutedText className="text-sm">
-                    {data.provider.headline}
-                  </MutedText>
+                  <UIText className="text-base font-semibold">{data.provider.full_name}</UIText>
+                  <MutedText className="text-sm">{data.provider.headline}</MutedText>
                   <View className="flex-row items-center gap-2 pt-0.5">
                     <View className="flex-row items-center gap-1">
                       <MaterialCommunityIcons color="#F59E0B" name="star" size={12} />
@@ -131,9 +122,7 @@ export default function ServiceDetailRoute() {
                   <View className="h-px bg-brand-border" />
                   <View className="gap-2">
                     <UIText className="text-base font-semibold">À propos</UIText>
-                    <MutedText className="text-sm leading-6">
-                      {data.provider.bio}
-                    </MutedText>
+                    <MutedText className="text-sm leading-6">{data.provider.bio}</MutedText>
                   </View>
                 </>
               ) : null}
@@ -142,9 +131,7 @@ export default function ServiceDetailRoute() {
 
               <View className="gap-2">
                 <UIText className="text-base font-semibold">Description</UIText>
-                <MutedText className="text-sm leading-6">
-                  {data.description}
-                </MutedText>
+                <MutedText className="text-sm leading-6">{data.description}</MutedText>
               </View>
 
               {data.reviews.length ? (
@@ -155,23 +142,20 @@ export default function ServiceDetailRoute() {
                       Avis ({data.reviews.length})
                     </UIText>
                     {data.reviews.map((review) => (
-                      <View
-                        key={review.id}
-                        className="gap-2 rounded-xl bg-brand-card p-4"
-                      >
+                      <View key={review.id} className="gap-2 rounded-xl bg-brand-card p-4">
                         <View className="flex-row items-center justify-between">
                           <UIText className="text-sm font-semibold">{review.author_name}</UIText>
                           <View className="flex-row items-center gap-1">
                             <MaterialCommunityIcons color="#F59E0B" name="star" size={12} />
-                            <UIText className="text-xs font-semibold">{review.rating.toFixed(1)}</UIText>
+                            <UIText className="text-xs font-semibold">
+                              {review.rating.toFixed(1)}
+                            </UIText>
                             <MutedText className="text-xs">
                               • {formatReviewDate(review.created_at)}
                             </MutedText>
                           </View>
                         </View>
-                        <MutedText className="text-sm leading-5">
-                          {review.comment}
-                        </MutedText>
+                        <MutedText className="text-sm leading-5">{review.comment}</MutedText>
                       </View>
                     ))}
                   </View>

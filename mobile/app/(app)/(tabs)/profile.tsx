@@ -1,8 +1,7 @@
-import { useRouter } from "expo-router";
-import React from "react";
+import { useRouter } from 'expo-router';
 
-import { ProfileScreenContent } from "@/features/auth/components/profile-screen-content";
-import { AUTH_FLOW_ROUTE } from "@/features/auth/utils/route-targets";
+import { ProfileScreenContent } from '@/features/auth/components/profile-screen-content';
+import { AUTH_FLOW_ROUTE } from '@/features/auth/utils/route-targets';
 
 export default function ProfileRoute() {
   const router = useRouter();

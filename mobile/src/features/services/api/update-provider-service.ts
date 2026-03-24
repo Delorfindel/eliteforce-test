@@ -1,23 +1,20 @@
-import type {
-  ProviderServiceFormValues,
-  ProviderServiceListItem
-} from "@/features/services/types";
-import { supabase } from "@/lib/supabase";
 import {
   createProviderServiceUpdate,
   mapProviderServiceListItem,
+  type ProviderServiceListRow,
   providerServiceListSelect,
-  type ProviderServiceListRow
-} from "@/features/services/api/shared";
+} from '@/features/services/api/shared';
+import type { ProviderServiceFormValues, ProviderServiceListItem } from '@/features/services/types';
+import { supabase } from '@/lib/supabase';
 
 export async function updateProviderService(
   serviceId: number,
-  input: ProviderServiceFormValues
+  input: ProviderServiceFormValues,
 ): Promise<ProviderServiceListItem> {
   const { data, error } = await supabase
-    .from("provider_services")
+    .from('provider_services')
     .update(createProviderServiceUpdate(input))
-    .eq("id", serviceId)
+    .eq('id', serviceId)
     .select(providerServiceListSelect)
     .maybeSingle();
 
@@ -26,7 +23,7 @@ export async function updateProviderService(
   }
 
   if (!data) {
-    throw new Error("La mise a jour de la prestation a echoue.");
+    throw new Error('La mise a jour de la prestation a echoue.');
   }
 
   return mapProviderServiceListItem(data as ProviderServiceListRow);

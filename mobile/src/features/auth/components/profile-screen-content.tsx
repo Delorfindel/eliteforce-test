@@ -1,13 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
-import React from "react";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-
-import { Button } from "@/components/ui/button";
-import { MutedText, UIText } from "@/components/ui/text";
-import { useAuthSession } from "@/features/auth/hooks/use-auth-session";
-import { ProviderServicesManager } from "@/features/services/components/provider-services-manager";
-import { supabase } from "@/lib/supabase";
-import { Pressable, ScrollView, View } from "@/tw";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useMutation } from '@tanstack/react-query';
+import { MutedText, UIText } from '@/components/ui/text';
+import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
+import { ProviderServicesManager } from '@/features/services/components/provider-services-manager';
+import { supabase } from '@/lib/supabase';
+import { Pressable, ScrollView, View } from '@/tw';
 
 type ProfileScreenContentProps = {
   onSignedOut: () => void;
@@ -42,24 +39,17 @@ type MenuItemProps = {
 
 function MenuItem({ icon, label, onPress, destructive }: MenuItemProps) {
   return (
-    <Pressable
-      className="flex-row items-center gap-4 py-3.5"
-      onPress={onPress}
-    >
+    <Pressable className="flex-row items-center gap-4 py-3.5" onPress={onPress}>
       <View
         className={`h-10 w-10 items-center justify-center rounded-full ${
-          destructive ? "bg-[#fef3f2]" : "bg-brand-sand-strong"
+          destructive ? 'bg-[#fef3f2]' : 'bg-brand-sand-strong'
         }`}
       >
-        <MaterialCommunityIcons
-          color={destructive ? "#DC2626" : "#525252"}
-          name={icon}
-          size={18}
-        />
+        <MaterialCommunityIcons color={destructive ? '#DC2626' : '#525252'} name={icon} size={18} />
       </View>
       <UIText
         className={`flex-1 text-sm font-semibold ${
-          destructive ? "text-brand-danger" : "text-brand-ink"
+          destructive ? 'text-brand-danger' : 'text-brand-ink'
         }`}
       >
         {label}
@@ -71,23 +61,19 @@ function MenuItem({ icon, label, onPress, destructive }: MenuItemProps) {
   );
 }
 
-export function ProfileScreenContent({
-  onSignedOut
-}: ProfileScreenContentProps) {
+export function ProfileScreenContent({ onSignedOut }: ProfileScreenContentProps) {
   const { profile, user } = useAuthSession();
-  const isProvider = profile?.role === "provider";
+  const isProvider = profile?.role === 'provider';
 
   const signOutMutation = useMutation({
     mutationFn: async () => {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
     },
-    onSuccess: onSignedOut
+    onSuccess: onSignedOut,
   });
 
-  const initials = profile
-    ? `${profile.first_name.charAt(0)}${profile.last_name.charAt(0)}`
-    : "?";
+  const initials = profile ? `${profile.first_name.charAt(0)}${profile.last_name.charAt(0)}` : '?';
 
   return (
     <ScrollView
@@ -101,9 +87,9 @@ export function ProfileScreenContent({
         </View>
         <View className="items-center gap-0.5">
           <UIText className="text-xl font-semibold">
-            {profile ? `${profile.first_name} ${profile.last_name}` : "Chargement..."}
+            {profile ? `${profile.first_name} ${profile.last_name}` : 'Chargement...'}
           </UIText>
-          {profile?.role === "provider" ? (
+          {profile?.role === 'provider' ? (
             <View className="mt-1 rounded-full bg-brand-accent-light px-3 py-1">
               <UIText className="text-xs font-semibold text-brand-clay">Prestataire</UIText>
             </View>
@@ -116,26 +102,24 @@ export function ProfileScreenContent({
           <ProfileRow
             icon="email-outline"
             label="Email"
-            value={profile?.email ?? user?.email ?? "Non renseigné"}
+            value={profile?.email ?? user?.email ?? 'Non renseigné'}
           />
           <View className="h-px bg-brand-border" />
           <ProfileRow
             icon="phone-outline"
             label="Téléphone"
-            value={profile?.phone ?? "Non renseigné"}
+            value={profile?.phone ?? 'Non renseigné'}
           />
           <View className="h-px bg-brand-border" />
           <ProfileRow
             icon="shield-account-outline"
             label="Rôle"
-            value={profile?.role === "provider" ? "Prestataire" : "Client"}
+            value={profile?.role === 'provider' ? 'Prestataire' : 'Client'}
           />
         </View>
       </View>
 
-      {isProvider && profile ? (
-        <ProviderServicesManager providerId={profile.id} />
-      ) : null}
+      {isProvider && profile ? <ProviderServicesManager providerId={profile.id} /> : null}
 
       <View className="rounded-2xl bg-white shadow-sm">
         <View className="px-5">
@@ -152,7 +136,7 @@ export function ProfileScreenContent({
           <MenuItem
             destructive
             icon="logout"
-            label={signOutMutation.isPending ? "Déconnexion..." : "Se déconnecter"}
+            label={signOutMutation.isPending ? 'Déconnexion...' : 'Se déconnecter'}
             onPress={() => signOutMutation.mutate()}
           />
         </View>

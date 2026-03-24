@@ -1,9 +1,8 @@
-import { Redirect, useRouter } from "expo-router";
-import React from "react";
-import { AuthScreenShell } from "@/features/auth/components/auth-screen-shell";
-import { RegisterForm } from "@/features/auth/components/register-form";
-import { useAuthSession } from "@/features/auth/hooks/use-auth-session";
-import { APP_SHELL_ROUTE } from "@/features/auth/utils/route-targets";
+import { Redirect, useRouter } from 'expo-router';
+import { AuthScreenShell } from '@/features/auth/components/auth-screen-shell';
+import { RegisterForm } from '@/features/auth/components/register-form';
+import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
+import { APP_SHELL_ROUTE } from '@/features/auth/utils/route-targets';
 
 export default function RegisterRoute() {
   const router = useRouter();

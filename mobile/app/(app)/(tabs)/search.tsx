@@ -1,24 +1,24 @@
-import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
-import { FlatList, RefreshControl } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useQuery } from '@tanstack/react-query';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React from 'react';
+import { FlatList, RefreshControl } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import { MutedText, UIText } from "@/components/ui/text";
-import { listCategories } from "@/features/services/api/list-categories";
-import { SearchFilters } from "@/features/services/components/search-filters";
-import { ServiceCard } from "@/features/services/components/service-card";
-import { useServicesSearch } from "@/features/services/hooks/use-services-search";
-import { useSearchFiltersStore } from "@/store/search-filters-store";
-import { View } from "@/tw";
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
+import { MutedText, UIText } from '@/components/ui/text';
+import { listCategories } from '@/features/services/api/list-categories';
+import { SearchFilters } from '@/features/services/components/search-filters';
+import { ServiceCard } from '@/features/services/components/service-card';
+import { useServicesSearch } from '@/features/services/hooks/use-services-search';
+import { useSearchFiltersStore } from '@/store/search-filters-store';
+import { View } from '@/tw';
 
 export default function SearchRoute() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ categoryId?: string }>();
-  const [query, setQuery] = React.useState("");
+  const [query, setQuery] = React.useState('');
   const categoryId = useSearchFiltersStore((state) => state.categoryId);
   const maxPrice = useSearchFiltersStore((state) => state.maxPrice);
   const minPrice = useSearchFiltersStore((state) => state.minPrice);
@@ -27,14 +27,14 @@ export default function SearchRoute() {
 
   const categoriesQuery = useQuery({
     queryFn: listCategories,
-    queryKey: ["service-categories"]
+    queryKey: ['service-categories'],
   });
   const searchQuery = useServicesSearch({
     categoryId,
     maxPrice,
     minPrice,
     minRating,
-    query
+    query,
   });
 
   React.useEffect(() => {
@@ -49,11 +49,11 @@ export default function SearchRoute() {
     <View className="flex-1 bg-brand-sand">
       <View
         style={{
-          backgroundColor: "#FFFFFF",
-          borderBottomColor: "#E5E5E5",
+          backgroundColor: '#FFFFFF',
+          borderBottomColor: '#E5E5E5',
           borderBottomWidth: 0.5,
           paddingTop: insets.top,
-          zIndex: 10
+          zIndex: 10,
         }}
       >
         <View className="gap-3 px-5 pb-3 pt-2">
@@ -73,7 +73,7 @@ export default function SearchRoute() {
           gap: 12,
           paddingBottom: 32,
           paddingHorizontal: 20,
-          paddingTop: 16
+          paddingTop: 16,
         }}
         data={searchQuery.data ?? []}
         keyExtractor={(item) => String(item.id)}
@@ -94,7 +94,8 @@ export default function SearchRoute() {
         ListHeaderComponent={
           !searchQuery.isLoading && resultCount > 0 ? (
             <MutedText className="mb-2 text-xs">
-              {resultCount} prestation{resultCount > 1 ? "s" : ""} trouvée{resultCount > 1 ? "s" : ""}
+              {resultCount} prestation{resultCount > 1 ? 's' : ''} trouvée
+              {resultCount > 1 ? 's' : ''}
             </MutedText>
           ) : null
         }

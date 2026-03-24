@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { uiStorage } from "@/lib/storage";
+import { uiStorage } from '@/lib/storage';
 
 export type SearchFilters = {
   categoryId: number | null;
@@ -22,7 +22,7 @@ const defaultFilters: SearchFilters = {
   categoryId: null,
   minPrice: 0,
   maxPrice: null,
-  minRating: 0
+  minRating: 0,
 };
 
 export const useSearchFiltersStore = create<SearchFiltersState>()(
@@ -33,11 +33,11 @@ export const useSearchFiltersStore = create<SearchFiltersState>()(
       setCategoryId: (value) => set({ categoryId: value }),
       setMaxPrice: (value) => set({ maxPrice: value }),
       setMinPrice: (value) => set({ minPrice: value }),
-      setMinRating: (value) => set({ minRating: value })
+      setMinRating: (value) => set({ minRating: value }),
     }),
     {
-      name: "eliteforce-search-filters",
-      storage: createJSONStorage(() => uiStorage)
-    }
-  )
+      name: 'eliteforce-search-filters',
+      storage: createJSONStorage(() => uiStorage),
+    },
+  ),
 );

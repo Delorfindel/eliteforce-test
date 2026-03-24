@@ -1,4 +1,3 @@
-import type { Database } from "@/types/database.types";
 import type {
   MarketplaceServiceCard,
   MarketplaceServiceDetail,
@@ -6,16 +5,17 @@ import type {
   ProviderServiceListItem,
   ProviderSummary,
   ServiceCategory,
-  ServiceReview
-} from "@/features/services/types";
+  ServiceReview,
+} from '@/features/services/types';
+import type { Database } from '@/types/database.types';
 
-type CategoryRow = Database["public"]["Tables"]["service_categories"]["Row"];
-type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
-type ProviderProfileRow = Database["public"]["Tables"]["provider_profiles"]["Row"];
-type ProviderServiceInsert = Database["public"]["Tables"]["provider_services"]["Insert"];
-type ProviderServiceRow = Database["public"]["Tables"]["provider_services"]["Row"];
-type ProviderServiceUpdate = Database["public"]["Tables"]["provider_services"]["Update"];
-type ReviewRow = Database["public"]["Tables"]["service_reviews"]["Row"];
+type CategoryRow = Database['public']['Tables']['service_categories']['Row'];
+type ProfileRow = Database['public']['Tables']['profiles']['Row'];
+type ProviderProfileRow = Database['public']['Tables']['provider_profiles']['Row'];
+type ProviderServiceInsert = Database['public']['Tables']['provider_services']['Insert'];
+type ProviderServiceRow = Database['public']['Tables']['provider_services']['Row'];
+type ProviderServiceUpdate = Database['public']['Tables']['provider_services']['Update'];
+type ReviewRow = Database['public']['Tables']['service_reviews']['Row'];
 
 type NestedCategory = CategoryRow | CategoryRow[] | null;
 type NestedProfile = ProfileRow | ProfileRow[] | null;
@@ -45,7 +45,7 @@ function mapCategory(value: NestedCategory): ServiceCategory {
   const category = unwrapSingle(value);
 
   if (!category) {
-    throw new Error("Marketplace category is missing.");
+    throw new Error('Marketplace category is missing.');
   }
 
   return category;
@@ -56,13 +56,13 @@ function mapProvider(value: NestedProviderProfile): ProviderSummary {
   const profile = unwrapSingle(providerProfile?.profiles ?? null);
 
   if (!providerProfile) {
-    throw new Error("Marketplace provider is missing.");
+    throw new Error('Marketplace provider is missing.');
   }
 
   const fullName = [profile?.first_name, profile?.last_name]
-    .map((segment) => segment?.trim() ?? "")
+    .map((segment) => segment?.trim() ?? '')
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
 
   return {
     avatar_url: providerProfile.avatar_url,
@@ -70,18 +70,16 @@ function mapProvider(value: NestedProviderProfile): ProviderSummary {
     completed_missions_count: providerProfile.completed_missions_count,
     // `profiles` can be hidden by RLS for other users, even when the provider
     // profile itself is visible in the marketplace.
-    full_name: fullName || "Prestataire EliteForce",
+    full_name: fullName || 'Prestataire EliteForce',
     headline: providerProfile.headline,
     member_since: providerProfile.created_at,
     profile_id: providerProfile.profile_id,
     rating: providerProfile.rating,
-    review_count: providerProfile.review_count
+    review_count: providerProfile.review_count,
   };
 }
 
-export function mapMarketplaceServiceCard(
-  value: MarketplaceServiceRow
-): MarketplaceServiceCard {
+export function mapMarketplaceServiceCard(value: MarketplaceServiceRow): MarketplaceServiceCard {
   return {
     category: mapCategory(value.category),
     cover_image_url: value.cover_image_url,
@@ -95,24 +93,22 @@ export function mapMarketplaceServiceCard(
     short_description: value.short_description,
     slug: value.slug,
     title: value.title,
-    updated_at: value.updated_at
+    updated_at: value.updated_at,
   };
 }
 
 export function mapMarketplaceServiceDetail(
   value: MarketplaceServiceRow,
-  reviews: ReviewRow[]
+  reviews: ReviewRow[],
 ): MarketplaceServiceDetail {
   return {
     ...mapMarketplaceServiceCard(value),
     description: value.description,
-    reviews: reviews.map(mapServiceReview)
+    reviews: reviews.map(mapServiceReview),
   };
 }
 
-export function mapProviderServiceListItem(
-  value: ProviderServiceListRow
-): ProviderServiceListItem {
+export function mapProviderServiceListItem(value: ProviderServiceListRow): ProviderServiceListItem {
   return {
     category: mapCategory(value.category),
     cover_image_url: value.cover_image_url,
@@ -125,7 +121,7 @@ export function mapProviderServiceListItem(
     short_description: value.short_description,
     slug: value.slug,
     title: value.title,
-    updated_at: value.updated_at
+    updated_at: value.updated_at,
   };
 }
 
@@ -135,26 +131,26 @@ export function mapServiceReview(value: ReviewRow): ServiceReview {
     comment: value.comment,
     created_at: value.created_at,
     id: value.id,
-    rating: value.rating
+    rating: value.rating,
   };
 }
 
 export function slugifyTitle(title: string) {
   return title
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
     .slice(0, 48);
 }
 
 export function createProviderServiceInsert(
   input: ProviderServiceFormValues,
-  providerId: string
+  providerId: string,
 ): ProviderServiceInsert {
-  const slugBase = slugifyTitle(input.title) || "service";
+  const slugBase = slugifyTitle(input.title) || 'service';
 
   return {
     category_id: input.categoryId,
@@ -165,12 +161,12 @@ export function createProviderServiceInsert(
     provider_id: providerId,
     short_description: input.shortDescription.trim(),
     slug: `${slugBase}-${Date.now().toString(36)}`,
-    title: input.title.trim()
+    title: input.title.trim(),
   };
 }
 
 export function createProviderServiceUpdate(
-  input: ProviderServiceFormValues
+  input: ProviderServiceFormValues,
 ): ProviderServiceUpdate {
   return {
     category_id: input.categoryId,
@@ -179,7 +175,7 @@ export function createProviderServiceUpdate(
     hourly_rate: input.hourlyRate,
     is_active: input.isActive,
     short_description: input.shortDescription.trim(),
-    title: input.title.trim()
+    title: input.title.trim(),
   };
 }
 

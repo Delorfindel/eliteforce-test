@@ -1,15 +1,11 @@
-import {
-  QueryClientProvider,
-  focusManager,
-  onlineManager
-} from "@tanstack/react-query";
-import type { Session, User } from "@supabase/supabase-js";
-import React from "react";
-import { AppState, type AppStateStatus } from "react-native";
+import type { Session, User } from '@supabase/supabase-js';
+import { focusManager, onlineManager, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
+import { AppState, type AppStateStatus } from 'react-native';
 
-import { queryClient } from "@/lib/query-client";
-import { supabase } from "@/lib/supabase";
-import { useUIStore } from "@/store/ui-store";
+import { queryClient } from '@/lib/query-client';
+import { supabase } from '@/lib/supabase';
+import { useUIStore } from '@/store/ui-store';
 
 type AuthContextValue = {
   isHydrating: boolean;
@@ -17,16 +13,14 @@ type AuthContextValue = {
   user: User | null;
 };
 
-const AuthSessionContext = React.createContext<AuthContextValue | undefined>(
-  undefined
-);
+const AuthSessionContext = React.createContext<AuthContextValue | undefined>(undefined);
 
 type AppProvidersProps = {
   children: React.ReactNode;
 };
 
 function handleAppStateChange(status: AppStateStatus) {
-  const isActive = status === "active";
+  const isActive = status === 'active';
   focusManager.setFocused(isActive);
   onlineManager.setOnline(isActive);
 }
@@ -38,10 +32,7 @@ export function AppProviders({ children }: AppProvidersProps) {
 
   React.useEffect(() => {
     let active = true;
-    const appStateSubscription = AppState.addEventListener(
-      "change",
-      handleAppStateChange
-    );
+    const appStateSubscription = AppState.addEventListener('change', handleAppStateChange);
 
     void supabase.auth
       .getSession()
@@ -69,7 +60,7 @@ export function AppProviders({ children }: AppProvidersProps) {
       });
 
     const {
-      data: { subscription }
+      data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
       setIsHydrating(false);
@@ -84,17 +75,17 @@ export function AppProviders({ children }: AppProvidersProps) {
   }, [setAuthHydrated]);
 
   return (
-      <QueryClientProvider client={queryClient}>
-        <AuthSessionContext.Provider
-          value={{
-            isHydrating,
-            session,
-            user: session?.user ?? null
-          }}
-        >
-          {children}
-        </AuthSessionContext.Provider>
-      </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthSessionContext.Provider
+        value={{
+          isHydrating,
+          session,
+          user: session?.user ?? null,
+        }}
+      >
+        {children}
+      </AuthSessionContext.Provider>
+    </QueryClientProvider>
   );
 }
 
@@ -102,7 +93,7 @@ export function useAuthContext() {
   const context = React.useContext(AuthSessionContext);
 
   if (!context) {
-    throw new Error("useAuthContext must be used within AppProviders.");
+    throw new Error('useAuthContext must be used within AppProviders.');
   }
 
   return context;

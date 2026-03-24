@@ -1,20 +1,20 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import React from "react";
-import { Alert } from "react-native";
-import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Alert } from 'react-native';
 
-import { BootstrapScreen } from "@/components/ui/bootstrap-screen";
-import { UIText } from "@/components/ui/text";
-import { updatePassword } from "@/features/auth/api/update-password";
-import { AuthErrorBanner } from "@/features/auth/components/auth-error-banner";
-import { AuthPasswordField } from "@/features/auth/components/auth-password-field";
-import { AuthSubmitButton } from "@/features/auth/components/auth-submit-button";
-import { useAuthSession } from "@/features/auth/hooks/use-auth-session";
-import { establishRecoverySession } from "@/features/auth/utils/recovery-session";
-import { passwordConfirmationSchema } from "@/features/auth/schemas/password-schema";
-import { supabase } from "@/lib/supabase";
-import { View } from "@/tw";
+import { BootstrapScreen } from '@/components/ui/bootstrap-screen';
+import { UIText } from '@/components/ui/text';
+import { updatePassword } from '@/features/auth/api/update-password';
+import { AuthErrorBanner } from '@/features/auth/components/auth-error-banner';
+import { AuthPasswordField } from '@/features/auth/components/auth-password-field';
+import { AuthSubmitButton } from '@/features/auth/components/auth-submit-button';
+import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
+import { passwordConfirmationSchema } from '@/features/auth/schemas/password-schema';
+import { establishRecoverySession } from '@/features/auth/utils/recovery-session';
+import { supabase } from '@/lib/supabase';
+import { View } from '@/tw';
 
 type RecoveryParams = {
   access_token?: string;
@@ -33,21 +33,18 @@ type UpdatePasswordValues = {
   password: string;
 };
 
-export function UpdatePasswordForm({
-  onSuccess,
-  recoveryParams
-}: UpdatePasswordFormProps) {
+export function UpdatePasswordForm({ onSuccess, recoveryParams }: UpdatePasswordFormProps) {
   const { isAuthenticated } = useAuthSession();
   const [isPreparing, setIsPreparing] = React.useState(true);
   const [recoveryError, setRecoveryError] = React.useState<string>();
 
   const form = useForm<UpdatePasswordValues>({
     defaultValues: {
-      confirmPassword: "",
-      password: ""
+      confirmPassword: '',
+      password: '',
     },
-    mode: "onChange",
-    resolver: zodResolver(passwordConfirmationSchema)
+    mode: 'onChange',
+    resolver: zodResolver(passwordConfirmationSchema),
   });
 
   React.useEffect(() => {
@@ -58,14 +55,12 @@ export function UpdatePasswordForm({
         await establishRecoverySession({
           auth: supabase.auth,
           isAuthenticated,
-          recoveryParams
+          recoveryParams,
         });
       } catch (error) {
         if (active) {
           setRecoveryError(
-            error instanceof Error
-              ? error.message
-              : "This reset link is invalid or has expired."
+            error instanceof Error ? error.message : 'This reset link is invalid or has expired.',
           );
         }
       } finally {
@@ -86,21 +81,19 @@ export function UpdatePasswordForm({
     recoveryParams.access_token,
     recoveryParams.refresh_token,
     recoveryParams.token_hash,
-    recoveryParams.type
+    recoveryParams.type,
   ]);
 
   const mutation = useMutation({
     mutationFn: ({ password }: UpdatePasswordValues) => updatePassword(password),
     onError: (error) => {
-      setRecoveryError(
-        error instanceof Error ? error.message : "Unable to update your password."
-      );
+      setRecoveryError(error instanceof Error ? error.message : 'Unable to update your password.');
     },
     onSuccess: async () => {
       await supabase.auth.signOut();
-      Alert.alert("Password updated", "Please sign in with your new password.");
+      Alert.alert('Password updated', 'Please sign in with your new password.');
       onSuccess();
-    }
+    },
   });
 
   if (isPreparing) {
@@ -157,8 +150,8 @@ export function UpdatePasswordForm({
       />
 
       <UIText className="text-sm text-brand-ink-soft">
-        After the password update completes, the app signs you out and returns
-        you to the login screen.
+        After the password update completes, the app signs you out and returns you to the login
+        screen.
       </UIText>
     </View>
   );

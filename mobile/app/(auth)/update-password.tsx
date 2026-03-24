@@ -1,10 +1,10 @@
-import { useURL } from "expo-linking";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
-import { UpdatePasswordForm } from "@/features/auth/components/update-password-form";
-import { AuthScreenShell } from "@/features/auth/components/auth-screen-shell";
-import { resolveRecoveryParams } from "@/features/auth/utils/recovery-params";
-import { AUTH_FLOW_ROUTE } from "@/features/auth/utils/route-targets";
+import { useURL } from 'expo-linking';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React from 'react';
+import { AuthScreenShell } from '@/features/auth/components/auth-screen-shell';
+import { UpdatePasswordForm } from '@/features/auth/components/update-password-form';
+import { resolveRecoveryParams } from '@/features/auth/utils/recovery-params';
+import { AUTH_FLOW_ROUTE } from '@/features/auth/utils/route-targets';
 
 export default function UpdatePasswordRoute() {
   const params = useLocalSearchParams<{
@@ -22,17 +22,11 @@ export default function UpdatePasswordRoute() {
           access_token: params.access_token,
           refresh_token: params.refresh_token,
           token_hash: params.token_hash,
-          type: params.type
+          type: params.type,
         },
-        currentUrl ?? undefined
+        currentUrl ?? undefined,
       ),
-    [
-      currentUrl,
-      params.access_token,
-      params.refresh_token,
-      params.token_hash,
-      params.type
-    ]
+    [currentUrl, params.access_token, params.refresh_token, params.token_hash, params.type],
   );
 
   return (

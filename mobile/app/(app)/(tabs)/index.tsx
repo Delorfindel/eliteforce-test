@@ -1,17 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
-import React from "react";
-import { Animated, FlatList } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { Animated, FlatList } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Heading, MutedText, UIText } from "@/components/ui/text";
-import { useAuthSession } from "@/features/auth/hooks/use-auth-session";
-import { listCategories } from "@/features/services/api/list-categories";
-import { listTopProviderServices } from "@/features/services/api/list-top-provider-services";
-import { CategoryGrid } from "@/features/services/components/category-grid";
-import { ServiceCard } from "@/features/services/components/service-card";
-import { Pressable, View } from "@/tw";
+import { Heading, MutedText, UIText } from '@/components/ui/text';
+import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
+import { listCategories } from '@/features/services/api/list-categories';
+import { listTopProviderServices } from '@/features/services/api/list-top-provider-services';
+import { CategoryGrid } from '@/features/services/components/category-grid';
+import { ServiceCard } from '@/features/services/components/service-card';
+import { Pressable, View } from '@/tw';
 
 const HEADER_FULL = 170;
 const HEADER_COMPACT = 120;
@@ -22,11 +22,11 @@ export default function HomeRoute() {
   const insets = useSafeAreaInsets();
   const categoriesQuery = useQuery({
     queryFn: listCategories,
-    queryKey: ["service-categories"]
+    queryKey: ['service-categories'],
   });
   const topServicesQuery = useQuery({
     queryFn: listTopProviderServices,
-    queryKey: ["top-provider-services"]
+    queryKey: ['top-provider-services'],
   });
 
   const scrollY = React.useRef(new Animated.Value(0)).current;
@@ -37,48 +37,48 @@ export default function HomeRoute() {
   const headerHeight = scrollY.interpolate({
     inputRange: [0, scrollDistance],
     outputRange: [HEADER_FULL, HEADER_COMPACT],
-    extrapolate: "clamp"
+    extrapolate: 'clamp',
   });
 
   const greetingOpacity = scrollY.interpolate({
     inputRange: [0, scrollDistance / 2],
     outputRange: [1, 0],
-    extrapolate: "clamp"
+    extrapolate: 'clamp',
   });
 
   const greetingTranslateY = scrollY.interpolate({
     inputRange: [0, scrollDistance],
     outputRange: [0, -15],
-    extrapolate: "clamp"
+    extrapolate: 'clamp',
   });
 
   const titleTranslateY = scrollY.interpolate({
     inputRange: [0, scrollDistance],
     outputRange: [0, -20],
-    extrapolate: "clamp"
+    extrapolate: 'clamp',
   });
 
   const headerContent = (
     <Animated.View
       style={{
-        backgroundColor: "#FFFFFF",
-        borderBottomColor: "#E5E5E5",
+        backgroundColor: '#FFFFFF',
+        borderBottomColor: '#E5E5E5',
         borderBottomWidth: 0.5,
         height: headerHeight,
         paddingHorizontal: 20,
         paddingTop: insets.top,
-        zIndex: 10
+        zIndex: 10,
       }}
     >
       <View className="flex-1 justify-end pb-3">
         <Animated.View
           style={{
             opacity: greetingOpacity,
-            transform: [{ translateY: greetingTranslateY }]
+            transform: [{ translateY: greetingTranslateY }],
           }}
         >
           <MutedText className="text-sm">
-            {`Bonjour${profile?.first_name ? `, ${profile.first_name}` : ""} 👋`}
+            {`Bonjour${profile?.first_name ? `, ${profile.first_name}` : ''} 👋`}
           </MutedText>
         </Animated.View>
 
@@ -88,7 +88,7 @@ export default function HomeRoute() {
 
         <Pressable
           className="mt-3 flex-row items-center gap-3 rounded-full bg-brand-sand-strong px-5 py-3"
-          onPress={() => router.push("/search")}
+          onPress={() => router.push('/search')}
         >
           <MaterialCommunityIcons color="#A3A3A3" name="magnify" size={20} />
           <MutedText className="text-sm">Plomberie, ménage, montage...</MutedText>
@@ -98,9 +98,9 @@ export default function HomeRoute() {
   );
 
   const sections = React.useMemo(() => {
-    const items: Array<{ key: string; type: "categories" | "services" }> = [
-      { key: "categories", type: "categories" },
-      { key: "services", type: "services" }
+    const items: Array<{ key: string; type: 'categories' | 'services' }> = [
+      { key: 'categories', type: 'categories' },
+      { key: 'services', type: 'services' },
     ];
     return items;
   }, []);
@@ -113,17 +113,16 @@ export default function HomeRoute() {
         contentContainerStyle={{ paddingBottom: 32 }}
         data={sections}
         keyExtractor={(item) => item.key}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false }
-        )}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: false,
+        })}
         renderItem={({ item }) => {
-          if (item.type === "categories") {
+          if (item.type === 'categories') {
             return (
               <View className="mt-6 gap-4">
                 <View className="flex-row items-center justify-between px-5">
                   <UIText className="text-lg font-semibold">Catégories</UIText>
-                  <Pressable hitSlop={8} onPress={() => router.push("/search")}>
+                  <Pressable hitSlop={8} onPress={() => router.push('/search')}>
                     <UIText className="text-sm font-semibold text-brand-clay">Tout voir</UIText>
                   </Pressable>
                 </View>
@@ -132,8 +131,8 @@ export default function HomeRoute() {
                     categories={categoriesQuery.data ?? []}
                     onSelectCategory={(category) =>
                       router.push({
-                        pathname: "/search",
-                        params: { categoryId: String(category.id) }
+                        pathname: '/search',
+                        params: { categoryId: String(category.id) },
                       })
                     }
                   />

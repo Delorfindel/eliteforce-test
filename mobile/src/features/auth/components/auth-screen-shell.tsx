@@ -1,14 +1,14 @@
-import { Link } from "expo-router";
-import React from "react";
+import { Link } from 'expo-router';
+import type React from 'react';
 
-import { Heading, MutedText, UIText } from "@/components/ui/text";
-import { ScrollView, View } from "@/tw";
+import { Heading, MutedText, UIText } from '@/components/ui/text';
+import { ScrollView, View } from '@/tw';
 
 type AuthScreenShellProps = {
   title: string;
   description: string;
   children: React.ReactNode;
-  footerHref?: "/login" | "/register" | "/forgot-password";
+  footerHref?: '/login' | '/register' | '/forgot-password';
   footerLabel?: string;
   footerText?: string;
 };
@@ -19,7 +19,7 @@ export function AuthScreenShell({
   footerHref,
   footerLabel,
   footerText,
-  title
+  title,
 }: AuthScreenShellProps) {
   return (
     <ScrollView
@@ -37,17 +37,13 @@ export function AuthScreenShell({
           <MutedText className="text-base leading-7">{description}</MutedText>
         </View>
 
-        <View className="gap-5 rounded-2xl bg-brand-card p-6 shadow-sm">
-          {children}
-        </View>
+        <View className="gap-5 rounded-2xl bg-brand-card p-6 shadow-sm">{children}</View>
 
         {footerHref && footerLabel && footerText ? (
           <UIText className="text-center text-sm text-brand-ink-soft">
-            {footerText}{" "}
+            {footerText}{' '}
             <Link href={footerHref}>
-              <UIText className="text-sm font-semibold text-brand-clay">
-                {footerLabel}
-              </UIText>
+              <UIText className="text-sm font-semibold text-brand-clay">{footerLabel}</UIText>
             </Link>
           </UIText>
         ) : null}

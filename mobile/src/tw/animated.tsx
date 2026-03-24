@@ -1,7 +1,7 @@
-import { Animated as RNAnimated } from "react-native";
+import { Animated as RNAnimated } from 'react-native';
 
 export const Animated = {
   ...RNAnimated,
   View: RNAnimated.View,
-  ScrollView: RNAnimated.ScrollView
+  ScrollView: RNAnimated.ScrollView,
 };

@@ -1,21 +1,17 @@
-import { Redirect, Stack } from "expo-router";
-import React from "react";
+import { Redirect, Stack } from 'expo-router';
 
-import { BootstrapScreen } from "@/components/ui/bootstrap-screen";
-import { useAuthContext } from "@/providers/app-providers";
-import {
-  AUTH_FLOW_ROUTE,
-  resolveProtectedRouteTarget
-} from "@/features/auth/utils/route-targets";
+import { BootstrapScreen } from '@/components/ui/bootstrap-screen';
+import { AUTH_FLOW_ROUTE, resolveProtectedRouteTarget } from '@/features/auth/utils/route-targets';
+import { useAuthContext } from '@/providers/app-providers';
 
 export default function ProtectedLayout() {
   const { isHydrating, user } = useAuthContext();
   const target = resolveProtectedRouteTarget({
     isAuthenticated: Boolean(user),
-    isHydrating
+    isHydrating,
   });
 
-  if (target === "bootstrap") {
+  if (target === 'bootstrap') {
     return <BootstrapScreen />;
   }
 
@@ -26,7 +22,7 @@ export default function ProtectedLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: false
+        headerShown: false,
       }}
     />
   );

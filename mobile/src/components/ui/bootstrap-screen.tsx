@@ -1,8 +1,6 @@
-import React from "react";
-
-import { Heading, MutedText } from "@/components/ui/text";
-import { Spinner } from "@/components/ui/spinner";
-import { View } from "@/tw";
+import { Spinner } from '@/components/ui/spinner';
+import { Heading, MutedText } from '@/components/ui/text';
+import { View } from '@/tw';
 
 export function BootstrapScreen() {
   return (

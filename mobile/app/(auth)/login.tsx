@@ -1,23 +1,20 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { Link, Redirect, useRouter } from "expo-router";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { Link, Redirect, useRouter } from 'expo-router';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
-import { Button } from "@/components/ui/button";
-import { UIText } from "@/components/ui/text";
-import { signIn } from "@/features/auth/api/sign-in";
-import { AuthErrorBanner } from "@/features/auth/components/auth-error-banner";
-import { AuthPasswordField } from "@/features/auth/components/auth-password-field";
-import { AuthScreenShell } from "@/features/auth/components/auth-screen-shell";
-import { AuthSubmitButton } from "@/features/auth/components/auth-submit-button";
-import { AuthTextField } from "@/features/auth/components/auth-text-field";
-import {
-  loginSchema,
-  type LoginFormValues
-} from "@/features/auth/schemas/login-schema";
-import { useAuthSession } from "@/features/auth/hooks/use-auth-session";
-import { View } from "@/tw";
+import { Button } from '@/components/ui/button';
+import { UIText } from '@/components/ui/text';
+import { signIn } from '@/features/auth/api/sign-in';
+import { AuthErrorBanner } from '@/features/auth/components/auth-error-banner';
+import { AuthPasswordField } from '@/features/auth/components/auth-password-field';
+import { AuthScreenShell } from '@/features/auth/components/auth-screen-shell';
+import { AuthSubmitButton } from '@/features/auth/components/auth-submit-button';
+import { AuthTextField } from '@/features/auth/components/auth-text-field';
+import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
+import { type LoginFormValues, loginSchema } from '@/features/auth/schemas/login-schema';
+import { View } from '@/tw';
 
 export default function LoginRoute() {
   const router = useRouter();
@@ -26,21 +23,21 @@ export default function LoginRoute() {
 
   const form = useForm<LoginFormValues>({
     defaultValues: {
-      email: "",
-      password: ""
+      email: '',
+      password: '',
     },
-    mode: "onChange",
-    resolver: zodResolver(loginSchema)
+    mode: 'onChange',
+    resolver: zodResolver(loginSchema),
   });
 
   const mutation = useMutation({
     mutationFn: signIn,
     onError: (error) => {
-      setFormError(error instanceof Error ? error.message : "Unable to sign in.");
+      setFormError(error instanceof Error ? error.message : 'Unable to sign in.');
     },
     onSuccess: () => {
-      router.replace("/(app)/(tabs)");
-    }
+      router.replace('/(app)/(tabs)');
+    },
   });
 
   if (!isHydrating && isAuthenticated) {

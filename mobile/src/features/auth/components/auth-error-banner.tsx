@@ -1,7 +1,5 @@
-import React from "react";
-
-import { UIText } from "@/components/ui/text";
-import { View } from "@/tw";
+import { UIText } from '@/components/ui/text';
+import { View } from '@/tw';
 
 type AuthErrorBannerProps = {
   message?: string;

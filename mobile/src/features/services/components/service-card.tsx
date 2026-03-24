@@ -1,39 +1,39 @@
-import React from "react";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import React from 'react';
 
-import { MutedText, UIText } from "@/components/ui/text";
-import { Image } from "@/tw/image";
-import { Pressable, View } from "@/tw";
-import type { MarketplaceServiceCard } from "@/features/services/types";
+import { MutedText, UIText } from '@/components/ui/text';
+import type { MarketplaceServiceCard } from '@/features/services/types';
+import { Pressable, View } from '@/tw';
+import { Image } from '@/tw/image';
 
 type ServiceCardProps = {
   onPress?: () => void;
   service: MarketplaceServiceCard;
-  variant?: "featured" | "list";
+  variant?: 'featured' | 'list';
 };
 
 export const ServiceCard = React.memo(function ServiceCard({
   onPress,
   service,
-  variant = "featured"
+  variant = 'featured',
 }: ServiceCardProps) {
   return (
     <Pressable
       accessibilityLabel={`Ouvrir ${service.title}`}
       className={`overflow-hidden rounded-2xl bg-white shadow-sm border border-black/5 ${
-        variant === "featured" ? "w-[280px]" : "w-full"
+        variant === 'featured' ? 'w-[280px]' : 'w-full'
       }`}
       disabled={!onPress}
       onPress={onPress}
     >
       <Image
         cachePolicy="memory-disk"
-        className={`w-full ${variant === "featured" ? "h-36" : "h-48"}`}
+        className={`w-full ${variant === 'featured' ? 'h-36' : 'h-48'}`}
         contentFit="cover"
         recyclingKey={String(service.id)}
         source={
           service.cover_image_url ??
-          "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+          'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80'
         }
         transition={200}
       />
@@ -50,9 +50,7 @@ export const ServiceCard = React.memo(function ServiceCard({
             <UIText className="text-xs font-semibold text-brand-ink">
               {service.rating.toFixed(1)}
             </UIText>
-            <MutedText className="text-xs">
-              ({service.review_count})
-            </MutedText>
+            <MutedText className="text-xs">({service.review_count})</MutedText>
           </View>
         </View>
 
@@ -60,7 +58,7 @@ export const ServiceCard = React.memo(function ServiceCard({
           {service.title}
         </UIText>
 
-        {variant === "list" ? (
+        {variant === 'list' ? (
           <MutedText className="text-sm leading-5" numberOfLines={2}>
             {service.short_description}
           </MutedText>
@@ -70,9 +68,7 @@ export const ServiceCard = React.memo(function ServiceCard({
           <UIText className="text-base font-bold text-brand-clay">
             {service.hourly_rate.toFixed(0)} MAD/h
           </UIText>
-          <MutedText className="text-xs">
-            {service.provider.full_name}
-          </MutedText>
+          <MutedText className="text-xs">{service.provider.full_name}</MutedText>
         </View>
       </View>
     </Pressable>

@@ -1,22 +1,21 @@
-import { Redirect } from "expo-router";
-import React from "react";
+import { Redirect } from 'expo-router';
 
-import { BootstrapScreen } from "@/components/ui/bootstrap-screen";
-import { useAuthContext } from "@/providers/app-providers";
+import { BootstrapScreen } from '@/components/ui/bootstrap-screen';
 import {
   APP_SHELL_ROUTE,
   AUTH_FLOW_ROUTE,
-  resolveIndexRouteTarget
-} from "@/features/auth/utils/route-targets";
+  resolveIndexRouteTarget,
+} from '@/features/auth/utils/route-targets';
+import { useAuthContext } from '@/providers/app-providers';
 
 export default function IndexRoute() {
   const { isHydrating, user } = useAuthContext();
   const target = resolveIndexRouteTarget({
     isAuthenticated: Boolean(user),
-    isHydrating
+    isHydrating,
   });
 
-  if (target === "bootstrap") {
+  if (target === 'bootstrap') {
     return <BootstrapScreen />;
   }
 

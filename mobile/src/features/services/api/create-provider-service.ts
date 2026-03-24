@@ -1,21 +1,18 @@
-import type {
-  ProviderServiceFormValues,
-  ProviderServiceListItem
-} from "@/features/services/types";
-import { supabase } from "@/lib/supabase";
 import {
   createProviderServiceInsert,
   mapProviderServiceListItem,
+  type ProviderServiceListRow,
   providerServiceListSelect,
-  type ProviderServiceListRow
-} from "@/features/services/api/shared";
+} from '@/features/services/api/shared';
+import type { ProviderServiceFormValues, ProviderServiceListItem } from '@/features/services/types';
+import { supabase } from '@/lib/supabase';
 
 export async function createProviderService(
   providerId: string,
-  input: ProviderServiceFormValues
+  input: ProviderServiceFormValues,
 ): Promise<ProviderServiceListItem> {
   const { data, error } = await supabase
-    .from("provider_services")
+    .from('provider_services')
     .insert(createProviderServiceInsert(input, providerId))
     .select(providerServiceListSelect)
     .maybeSingle();
@@ -25,7 +22,7 @@ export async function createProviderService(
   }
 
   if (!data) {
-    throw new Error("La creation de la prestation a echoue.");
+    throw new Error('La creation de la prestation a echoue.');
   }
 
   return mapProviderServiceListItem(data as ProviderServiceListRow);

@@ -1,12 +1,12 @@
-import React from "react";
-import { FlatList } from "react-native";
-import Slider from "@react-native-community/slider";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Slider from '@react-native-community/slider';
+import React from 'react';
+import { FlatList } from 'react-native';
 
-import { MutedText, UIText } from "@/components/ui/text";
-import { useSearchFiltersStore } from "@/store/search-filters-store";
-import { Pressable, View } from "@/tw";
-import type { ServiceCategory } from "@/features/services/types";
+import { MutedText, UIText } from '@/components/ui/text';
+import type { ServiceCategory } from '@/features/services/types';
+import { useSearchFiltersStore } from '@/store/search-filters-store';
+import { Pressable, View } from '@/tw';
 
 type SearchFiltersProps = {
   categories: ServiceCategory[];
@@ -24,41 +24,35 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
   const resetFilters = useSearchFiltersStore((state) => state.resetFilters);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const hasActiveFilters =
-    categoryId !== null || maxPrice !== null || minRating !== 0;
+  const hasActiveFilters = categoryId !== null || maxPrice !== null || minRating !== 0;
 
   return (
     <View className="gap-3">
       <View className="gap-2">
-        <UIText className="text-sm font-semibold text-brand-ink-soft">
-          Catégories
-        </UIText>
+        <UIText className="text-sm font-semibold text-brand-ink-soft">Catégories</UIText>
         <FlatList
           data={[
             {
               id: 0,
-              name: "Toutes"
+              name: 'Toutes',
             },
-            ...categories
+            ...categories,
           ]}
           horizontal
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => {
-            const isSelected =
-              item.id === 0 ? categoryId === null : item.id === categoryId;
+            const isSelected = item.id === 0 ? categoryId === null : item.id === categoryId;
 
             return (
               <Pressable
                 className={`mr-3 rounded-full px-4 py-2.5 ${
-                  isSelected
-                    ? "bg-brand-clay"
-                    : "bg-brand-sand-strong"
+                  isSelected ? 'bg-brand-clay' : 'bg-brand-sand-strong'
                 }`}
                 onPress={() => setCategoryId(item.id === 0 ? null : item.id)}
               >
                 <UIText
                   className={`text-sm font-semibold ${
-                    isSelected ? "text-white" : "text-brand-ink"
+                    isSelected ? 'text-white' : 'text-brand-ink'
                   }`}
                 >
                   {item.name}
@@ -77,12 +71,8 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
           onPress={() => setIsOpen((current) => !current)}
         >
           <View className="gap-0.5">
-            <UIText className="text-sm font-semibold text-brand-ink">
-              Filtres
-            </UIText>
-            <MutedText className="text-xs">
-              Prix, note minimale et budget visible ici
-            </MutedText>
+            <UIText className="text-sm font-semibold text-brand-ink">Filtres</UIText>
+            <MutedText className="text-xs">Prix, note minimale et budget visible ici</MutedText>
           </View>
           <View className="flex-row items-center gap-3">
             {hasActiveFilters ? (
@@ -90,14 +80,12 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
                 className="rounded-full bg-brand-sand-strong px-3 py-1.5"
                 onPress={resetFilters}
               >
-                <UIText className="text-xs font-semibold text-brand-ink">
-                  Réinitialiser
-                </UIText>
+                <UIText className="text-xs font-semibold text-brand-ink">Réinitialiser</UIText>
               </Pressable>
             ) : null}
             <MaterialCommunityIcons
               color="#525252"
-              name={isOpen ? "chevron-up" : "chevron-down"}
+              name={isOpen ? 'chevron-up' : 'chevron-down'}
               size={22}
             />
           </View>
@@ -107,11 +95,9 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
           <View className="gap-4 border-t border-brand-border px-4 py-4">
             <View className="gap-2">
               <View className="flex-row items-center justify-between">
-                <UIText className="text-sm font-semibold text-brand-ink">
-                  Prix maximum
-                </UIText>
+                <UIText className="text-sm font-semibold text-brand-ink">Prix maximum</UIText>
                 <UIText className="text-sm font-semibold text-primary-600">
-                  {maxPrice === null ? "Sans limite" : `${maxPrice} MAD`}
+                  {maxPrice === null ? 'Sans limite' : `${maxPrice} MAD`}
                 </UIText>
               </View>
               <View className="py-2">
@@ -136,9 +122,7 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
             </View>
 
             <View className="gap-2">
-              <UIText className="text-sm font-semibold text-brand-ink">
-                Note minimale
-              </UIText>
+              <UIText className="text-sm font-semibold text-brand-ink">Note minimale</UIText>
               <FlatList
                 data={ratingOptions}
                 horizontal
@@ -149,18 +133,16 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
                   return (
                     <Pressable
                       className={`mr-3 rounded-full px-4 py-2.5 ${
-                        isSelected
-                          ? "bg-brand-clay"
-                          : "bg-brand-sand-strong"
+                        isSelected ? 'bg-brand-clay' : 'bg-brand-sand-strong'
                       }`}
                       onPress={() => setMinRating(item)}
                     >
                       <UIText
                         className={`text-sm font-semibold ${
-                          isSelected ? "text-white" : "text-brand-ink"
+                          isSelected ? 'text-white' : 'text-brand-ink'
                         }`}
                       >
-                        {item === 0 ? "Toutes" : `${item}+`}
+                        {item === 0 ? 'Toutes' : `${item}+`}
                       </UIText>
                     </Pressable>
                   );

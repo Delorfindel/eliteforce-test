@@ -3,16 +3,16 @@ export function formatHourlyRate(amount: number) {
 }
 
 export function formatJoinDate(value: string) {
-  return new Intl.DateTimeFormat("fr-FR", {
-    month: "long",
-    year: "numeric"
+  return new Intl.DateTimeFormat('fr-FR', {
+    month: 'long',
+    year: 'numeric',
   }).format(new Date(value));
 }
 
 export function formatReviewDate(value: string) {
-  return new Intl.DateTimeFormat("fr-FR", {
-    day: "numeric",
-    month: "short",
-    year: "numeric"
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
   }).format(new Date(value));
 }

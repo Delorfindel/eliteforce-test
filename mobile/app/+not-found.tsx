@@ -1,14 +1,13 @@
-import { Link, Stack } from "expo-router";
-import React from "react";
+import { Link, Stack } from 'expo-router';
 
-import { Button } from "@/components/ui/button";
-import { Heading, MutedText } from "@/components/ui/text";
-import { View } from "@/tw";
+import { Button } from '@/components/ui/button';
+import { Heading, MutedText } from '@/components/ui/text';
+import { View } from '@/tw';
 
 export default function NotFoundRoute() {
   return (
     <>
-      <Stack.Screen options={{ title: "Not found" }} />
+      <Stack.Screen options={{ title: 'Not found' }} />
       <View className="flex-1 items-center justify-center bg-brand-sand px-8">
         <View className="w-full max-w-sm gap-6 rounded-2xl bg-brand-card p-8">
           <Heading className="text-center text-2xl">This route does not exist</Heading>
