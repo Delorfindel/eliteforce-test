@@ -31,11 +31,11 @@ export default function UpdatePasswordRoute() {
 
   return (
     <AuthScreenShell
-      description="Choose a new password to complete your recovery flow."
+      description="Choisissez un nouveau mot de passe pour terminer votre procédure de récupération."
       footerHref={AUTH_FLOW_ROUTE}
-      footerLabel="Return to login"
-      footerText="Back to the main sign-in screen?"
-      title="Create a new password"
+      footerLabel="Retour à la connexion"
+      footerText="Retourner à l'écran de connexion principal ?"
+      title="Créer un nouveau mot de passe"
     >
       <UpdatePasswordForm
         onSuccess={() => router.replace(AUTH_FLOW_ROUTE)}

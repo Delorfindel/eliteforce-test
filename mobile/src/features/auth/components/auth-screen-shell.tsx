@@ -1,17 +1,17 @@
 import { Link } from 'expo-router';
 import type React from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Heading, MutedText, UIText } from '@/components/ui/text';
-import { ScrollView, View } from '@/tw';
+import { UIText } from '@/components/ui/text';
+import { Pressable, ScrollView, View } from '@/tw';
 
 type AuthScreenShellProps = {
   title: string;
-  description: string;
+  description?: string;
   children: React.ReactNode;
   footerHref?: '/login' | '/register' | '/forgot-password';
   footerLabel?: string;
   footerText?: string;
+  type?: 'login' | 'register';
 };
 
 export function AuthScreenShell({
@@ -21,36 +21,41 @@ export function AuthScreenShell({
   footerLabel,
   footerText,
   title,
+  type = 'login',
 }: AuthScreenShellProps) {
-  const insets = useSafeAreaInsets();
-
   return (
-    <ScrollView
-      className="flex-1 bg-brand-sand"
-      contentContainerClassName="min-h-full px-5 pb-10"
-      contentContainerStyle={{ paddingTop: insets.top + 24 }}
-      keyboardShouldPersistTaps="handled"
-    >
-      <View className="flex-1 justify-center gap-6">
-        <View className="gap-3">
-          <MutedText className="text-sm uppercase tracking-[2px] text-brand-clay">
-            EliteForce Multiservices
-          </MutedText>
-          <Heading>{title}</Heading>
-          <MutedText className="text-base leading-7">{description}</MutedText>
+    <View className="flex-1 bg-white">
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="min-h-full px-5 pb-10 pt-8"
+        keyboardShouldPersistTaps="handled"
+      >
+        <View className="flex-1 gap-10">
+          {/* Logo Section */}
+          <View className="items-center gap-3">
+            <UIText className="text-4xl font-bold tracking-tight text-brand-clay">
+              EliteForce
+            </UIText>
+            {description ? (
+              <UIText className="text-base text-brand-ink-soft">{description}</UIText>
+            ) : null}
+          </View>
+
+          {/* Form Content */}
+          <View className="gap-5">{children}</View>
+
+          <View className="mt-auto pt-10">
+            {footerHref && footerLabel && footerText ? (
+              <UIText className="text-center text-base font-semibold text-brand-ink">
+                {footerText}{' '}
+                <Link href={footerHref}>
+                  <UIText className="text-base font-semibold text-brand-clay">{footerLabel}</UIText>
+                </Link>
+              </UIText>
+            ) : null}
+          </View>
         </View>
-
-        <View className="gap-5 rounded-2xl bg-brand-card p-6 shadow-sm">{children}</View>
-
-        {footerHref && footerLabel && footerText ? (
-          <UIText className="text-center text-sm text-brand-ink-soft">
-            {footerText}{' '}
-            <Link href={footerHref}>
-              <UIText className="text-sm font-semibold text-brand-clay">{footerLabel}</UIText>
-            </Link>
-          </UIText>
-        ) : null}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }

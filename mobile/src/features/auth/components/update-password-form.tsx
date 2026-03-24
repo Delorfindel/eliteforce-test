@@ -60,7 +60,7 @@ export function UpdatePasswordForm({ onSuccess, recoveryParams }: UpdatePassword
       } catch (error) {
         if (active) {
           setRecoveryError(
-            error instanceof Error ? error.message : 'This reset link is invalid or has expired.',
+            error instanceof Error ? error.message : 'Ce lien de réinitialisation est invalide ou a expiré.',
           );
         }
       } finally {
@@ -87,11 +87,11 @@ export function UpdatePasswordForm({ onSuccess, recoveryParams }: UpdatePassword
   const mutation = useMutation({
     mutationFn: ({ password }: UpdatePasswordValues) => updatePassword(password),
     onError: (error) => {
-      setRecoveryError(error instanceof Error ? error.message : 'Unable to update your password.');
+      setRecoveryError(error instanceof Error ? error.message : 'Impossible de mettre à jour votre mot de passe.');
     },
     onSuccess: async () => {
       await supabase.auth.signOut();
-      Alert.alert('Password updated', 'Please sign in with your new password.');
+      Alert.alert('Mot de passe mis à jour', 'Veuillez vous connecter avec votre nouveau mot de passe.');
       onSuccess();
     },
   });
@@ -111,13 +111,13 @@ export function UpdatePasswordForm({ onSuccess, recoveryParams }: UpdatePassword
           <AuthPasswordField
             autoCapitalize="none"
             error={fieldState.error?.message}
-            label="New password"
+            label="Nouveau mot de passe"
             onBlur={field.onBlur}
             onChangeText={(value) => {
               setRecoveryError(undefined);
               field.onChange(value);
             }}
-            placeholder="At least 8 characters"
+            placeholder="Au moins 8 caractères"
             value={field.value}
           />
         )}
@@ -130,13 +130,13 @@ export function UpdatePasswordForm({ onSuccess, recoveryParams }: UpdatePassword
           <AuthPasswordField
             autoCapitalize="none"
             error={fieldState.error?.message}
-            label="Confirm new password"
+            label="Confirmer le nouveau mot de passe"
             onBlur={field.onBlur}
             onChangeText={(value) => {
               setRecoveryError(undefined);
               field.onChange(value);
             }}
-            placeholder="Repeat your new password"
+            placeholder="Répétez le nouveau mot de passe"
             value={field.value}
           />
         )}
@@ -144,14 +144,13 @@ export function UpdatePasswordForm({ onSuccess, recoveryParams }: UpdatePassword
 
       <AuthSubmitButton
         disabled={!form.formState.isValid || mutation.isPending}
-        label="Update password"
+        label="Mettre à jour le mot de passe"
         loading={mutation.isPending}
         onPress={form.handleSubmit((values) => mutation.mutate(values))}
       />
 
       <UIText className="text-sm text-brand-ink-soft">
-        After the password update completes, the app signs you out and returns you to the login
-        screen.
+        Une fois la mise à jour terminée, l'application vous déconnecte et vous ramène à l'écran de connexion.
       </UIText>
     </View>
   );

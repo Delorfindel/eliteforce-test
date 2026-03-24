@@ -2,21 +2,21 @@ import { z } from 'zod';
 
 export const passwordSchema = z
   .string()
-  .min(8, 'Password must be at least 8 characters.')
-  .regex(/[A-Z]/, 'Password must contain an uppercase letter.')
-  .regex(/[a-z]/, 'Password must contain a lowercase letter.')
-  .regex(/[0-9]/, 'Password must contain a number.');
+  .min(8, 'Le mot de passe doit contenir au moins 8 caractères.')
+  .regex(/[A-Z]/, 'Le mot de passe doit contenir une majuscule.')
+  .regex(/[a-z]/, 'Le mot de passe doit contenir une minuscule.')
+  .regex(/[0-9]/, 'Le mot de passe doit contenir un chiffre.');
 
 export const passwordConfirmationSchema = z
   .object({
     password: passwordSchema,
-    confirmPassword: z.string().min(1, 'Please confirm your password.'),
+    confirmPassword: z.string().min(1, 'Veuillez confirmer votre mot de passe.'),
   })
   .superRefine(({ confirmPassword, password }, context) => {
     if (password !== confirmPassword) {
       context.addIssue({
         code: 'custom',
-        message: 'Passwords do not match.',
+        message: 'Les mots de passe ne correspondent pas.',
         path: ['confirmPassword'],
       });
     }

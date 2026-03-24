@@ -1,10 +1,11 @@
+import type React from 'react';
 import { UIText } from '@/components/ui/text';
 import { cn } from '@/lib/cn';
 import { Pressable, View } from '@/tw';
 
 type CheckboxProps = {
   checked: boolean;
-  label: string;
+  label?: string | React.ReactNode;
   onChange: (nextValue: boolean) => void;
 };
 
@@ -24,7 +25,9 @@ export function Checkbox({ checked, label, onChange }: CheckboxProps) {
       >
         {checked ? <UIText className="text-sm text-white">✓</UIText> : null}
       </View>
-      <UIText className="flex-1 text-sm leading-6 text-brand-ink-soft">{label}</UIText>
+      {label ? (
+        <UIText className="flex-1 text-sm leading-6 text-brand-ink-soft">{label}</UIText>
+      ) : null}
     </Pressable>
   );
 }

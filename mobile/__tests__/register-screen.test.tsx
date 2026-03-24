@@ -6,7 +6,6 @@ import { registerSchema } from '@/features/auth/schemas/register-schema';
 test('rejects invalid registration fields and missing terms acceptance', () => {
   const result = registerSchema.safeParse({
     acceptedTerms: false,
-    confirmPassword: 'short',
     email: 'not-an-email',
     firstName: 'A',
     lastName: 'B',
@@ -18,17 +17,16 @@ test('rejects invalid registration fields and missing terms acceptance', () => {
 
   if (!result.success) {
     const issues = result.error.issues.map((issue) => issue.message);
-    expect(issues).toContain('First name must be at least 2 characters.');
-    expect(issues).toContain('Enter a valid email address.');
-    expect(issues).toContain('Phone number must use the +212XXXXXXXXX format.');
-    expect(issues).toContain('You must accept the terms to continue.');
+    expect(issues).toContain('Le prénom doit contenir au moins 2 caractères.');
+    expect(issues).toContain('Veuillez entrer un e-mail valide.');
+    expect(issues).toContain('Le téléphone doit être au format +212XXXXXXXXX.');
+    expect(issues).toContain('Vous devez accepter les conditions pour continuer.');
   }
 });
 
 test('accepts a fully valid registration payload', () => {
   const result = registerSchema.safeParse({
     acceptedTerms: true,
-    confirmPassword: 'Password1',
     email: 'amina@example.com',
     firstName: 'Amina',
     lastName: 'Bennani',

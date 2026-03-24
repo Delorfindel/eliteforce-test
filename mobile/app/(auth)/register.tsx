@@ -13,13 +13,7 @@ export default function RegisterRoute() {
   }
 
   return (
-    <AuthScreenShell
-      description="Create your account to discover trusted household services and manage future bookings."
-      footerHref="/login"
-      footerLabel="Sign in"
-      footerText="Already registered?"
-      title="Create your account"
-    >
+    <AuthScreenShell title="S'inscrire" type="register">
       <RegisterForm onSuccess={() => router.replace(APP_SHELL_ROUTE)} />
     </AuthScreenShell>
   );

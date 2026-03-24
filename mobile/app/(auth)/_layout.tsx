@@ -8,12 +8,19 @@ export default function AuthLayout() {
           backgroundColor: '#FFFFFF',
         },
         headerTintColor: '#0A0A0A',
+        headerShadowVisible: false,
       }}
     >
-      <Stack.Screen name="login" options={{ title: 'Login' }} />
-      <Stack.Screen name="register" options={{ title: 'Create account' }} />
-      <Stack.Screen name="forgot-password" options={{ title: 'Forgot password' }} />
-      <Stack.Screen name="update-password" options={{ title: 'Update password' }} />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="register" options={{ title: "S'inscrire", headerBackTitle: 'Retour' }} />
+      <Stack.Screen
+        name="forgot-password"
+        options={{ title: 'Mot de passe oublié', headerBackTitle: 'Retour' }}
+      />
+      <Stack.Screen
+        name="update-password"
+        options={{ title: 'Mot de passe oublié', headerBackTitle: 'Retour' }}
+      />
     </Stack>
   );
 }
