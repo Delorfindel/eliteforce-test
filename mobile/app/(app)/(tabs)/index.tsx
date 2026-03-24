@@ -32,7 +32,7 @@ export default function HomeRoute() {
   const trendingCategories = categories.slice(1);
 
   return (
-    <ScrollView className="flex-1 bg-white" contentContainerClassName="pb-12">
+    <View className="flex-1 bg-white">
       <View
         className="border-b border-brand-border bg-white px-5 pb-6"
         style={{ paddingTop: insets.top + 8 }}
@@ -59,42 +59,46 @@ export default function HomeRoute() {
         </View>
       </View>
 
-      <View className="px-5 pt-8">
-        <Heading className="text-[24px] leading-[32px]">Je recherche un prestataire en...</Heading>
+      <ScrollView className="flex-1" contentContainerClassName="pb-12">
+        <View className="px-5 pt-8">
+          <Heading className="text-[24px] leading-[32px]">
+            Je recherche un prestataire en...
+          </Heading>
 
-        <Input
-          className="mt-6 bg-white text-lg"
-          editable={false}
-          onPressIn={() => router.push('/search')}
-          placeholder='Recherchez "Fixation TV", "Plomberie"...'
-        />
-      </View>
+          <Input
+            className="mt-6 bg-white text-lg"
+            editable={false}
+            onPressIn={() => router.push('/search')}
+            placeholder='Recherchez "Fixation TV", "Plomberie"...'
+          />
+        </View>
 
-      <View className="mt-8 px-5">
-        <UIText className="mb-4 text-[20px] font-semibold">Projets populaires</UIText>
-        <HomeCategoryGrid
-          categories={popularCategories}
-          onSelectCategory={(category) =>
-            router.push({
-              pathname: '/search/confirm',
-              params: { categoryId: String(category.id) },
-            })
-          }
-        />
-      </View>
+        <View className="mt-8 px-5">
+          <UIText className="mb-4 text-[20px] font-semibold">Projets populaires</UIText>
+          <HomeCategoryGrid
+            categories={popularCategories}
+            onSelectCategory={(category) =>
+              router.push({
+                pathname: '/search/confirm',
+                params: { categoryId: String(category.id) },
+              })
+            }
+          />
+        </View>
 
-      <View className="mt-2 px-5">
-        <UIText className="mb-4 text-[20px] font-semibold">Projets tendance</UIText>
-        <HomeCategoryGrid
-          categories={trendingCategories}
-          onSelectCategory={(category) =>
-            router.push({
-              pathname: '/search/confirm',
-              params: { categoryId: String(category.id) },
-            })
-          }
-        />
-      </View>
-    </ScrollView>
+        <View className="mt-2 px-5">
+          <UIText className="mb-4 text-[20px] font-semibold">Projets tendance</UIText>
+          <HomeCategoryGrid
+            categories={trendingCategories}
+            onSelectCategory={(category) =>
+              router.push({
+                pathname: '/search/confirm',
+                params: { categoryId: String(category.id) },
+              })
+            }
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 }

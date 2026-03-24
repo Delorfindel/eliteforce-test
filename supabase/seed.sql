@@ -63,8 +63,8 @@ values (
   null,
   '{"provider":"email","providers":["email"]}'::jsonb,
   jsonb_build_object(
-    'first_name', 'Yassine',
-    'last_name', 'El Mansouri',
+    'first_name', 'Mohamed',
+    'last_name', 'El Amrani',
     'phone', '+212612345681',
     'accepted_terms_at', timezone('utc', now())
   ),
@@ -308,6 +308,47 @@ values
     false,
     null,
     false
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    'ad1ec67d-6ba5-4e85-8fe8-b6af094f4d75',
+    'authenticated',
+    'authenticated',
+    'client.demo@eliteforce.local',
+    extensions.crypt('EliteForce123!', extensions.gen_salt('bf')),
+    timezone('utc', now()),
+    null,
+    '',
+    null,
+    '',
+    null,
+    '',
+    '',
+    null,
+    null,
+    '{"provider":"email","providers":["email"]}'::jsonb,
+    jsonb_build_object(
+      'first_name', 'Sara',
+      'last_name', 'Bennani',
+      'phone', '+212612345685',
+      'accepted_terms_at', timezone('utc', now())
+    ),
+    false,
+    timezone('utc', now()),
+    timezone('utc', now()),
+    null,
+    null,
+    '',
+    '',
+    null,
+    '',
+    0,
+    null,
+    '',
+    null,
+    false,
+    null,
+    false
   );
 
 insert into auth.identities (
@@ -365,6 +406,21 @@ values
     timezone('utc', now()),
     timezone('utc', now()),
     '82d4e5af-75fd-4c20-a078-3efc49c4b6fe'
+  ),
+  (
+    'ad1ec67d-6ba5-4e85-8fe8-b6af094f4d75',
+    'ad1ec67d-6ba5-4e85-8fe8-b6af094f4d75',
+    jsonb_build_object(
+      'sub', 'ad1ec67d-6ba5-4e85-8fe8-b6af094f4d75',
+      'email', 'client.demo@eliteforce.local',
+      'email_verified', true,
+      'phone_verified', false
+    ),
+    'email',
+    null,
+    timezone('utc', now()),
+    timezone('utc', now()),
+    'f14cec5d-1fe6-43ff-a872-f12ec363554c'
   );
 
 update public.profiles
@@ -508,6 +564,77 @@ values
     43,
     '2026-03-28T08:00:00Z',
     true,
+    timezone('utc', now()),
+    timezone('utc', now())
+  );
+
+insert into public.task_bookings (
+  client_id,
+  provider_id,
+  category_id,
+  offering_id,
+  scheduled_for,
+  hourly_rate,
+  total_price,
+  currency_code,
+  address,
+  address_details,
+  notes,
+  status,
+  payment_status,
+  client_rating,
+  client_rated_at,
+  created_at,
+  updated_at
+)
+values
+  (
+    'ad1ec67d-6ba5-4e85-8fe8-b6af094f4d75',
+    '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
+    (select id from public.service_categories where slug = 'plomberie'),
+    (
+      select id
+      from public.provider_category_offerings
+      where provider_id = '6f2167ad-c38f-490f-8c59-fd4f4aa71c01'
+        and category_id = (select id from public.service_categories where slug = 'plomberie')
+      limit 1
+    ),
+    '2026-02-08T09:30:00Z',
+    45.00,
+    45.00,
+    'MAD',
+    '12 Rue Ibn Sina, Casablanca',
+    'Appt 4B, sonnerie Bennani',
+    'Fuite sous l evier de la cuisine',
+    'completed',
+    'paid',
+    5.0,
+    '2026-02-08T11:15:00Z',
+    timezone('utc', now()),
+    timezone('utc', now())
+  ),
+  (
+    'ad1ec67d-6ba5-4e85-8fe8-b6af094f4d75',
+    '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
+    (select id from public.service_categories where slug = 'montage-meuble'),
+    (
+      select id
+      from public.provider_category_offerings
+      where provider_id = '6f2167ad-c38f-490f-8c59-fd4f4aa71c01'
+        and category_id = (select id from public.service_categories where slug = 'montage-meuble')
+      limit 1
+    ),
+    '2026-02-21T14:00:00Z',
+    39.90,
+    39.90,
+    'MAD',
+    '12 Rue Ibn Sina, Casablanca',
+    'Appt 4B, sonnerie Bennani',
+    'Montage d une commode et fixation murale',
+    'completed',
+    'paid',
+    null,
+    null,
     timezone('utc', now()),
     timezone('utc', now())
   );

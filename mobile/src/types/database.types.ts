@@ -255,6 +255,8 @@ export type Database = {
           address_details: string | null;
           category_id: number;
           client_id: string;
+          client_rated_at: string | null;
+          client_rating: number | null;
           created_at: string;
           currency_code: string;
           hourly_rate: number;
@@ -273,6 +275,8 @@ export type Database = {
           address_details?: string | null;
           category_id: number;
           client_id: string;
+          client_rated_at?: string | null;
+          client_rating?: number | null;
           created_at?: string;
           currency_code?: string;
           hourly_rate: number;
@@ -291,6 +295,8 @@ export type Database = {
           address_details?: string | null;
           category_id?: number;
           client_id?: string;
+          client_rated_at?: string | null;
+          client_rating?: number | null;
           created_at?: string;
           currency_code?: string;
           hourly_rate?: number;

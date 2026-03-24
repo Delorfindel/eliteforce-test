@@ -68,13 +68,31 @@ Reset the database, apply migrations, and seed demo data:
 
 ```bash
 npm run supabase:reset
+```
 
-The reset now seeds a local provider account you can use immediately in the
-mobile app:
+The accounts below are seeded from [supabase/seed.sql](/Users/dany/Projects/EliteForce/TaskRabbit/supabase/seed.sql) every time you run `npm run supabase:reset`.
+
+All seeded demo accounts share the same password:
+
+- Password: `EliteForce123!`
+
+Seeded client account:
+
+- Email: `client.demo@eliteforce.local`
+- Name: `Sara Bennani`
+- Role: `client`
+
+Seeded provider account (main local test provider):
 
 - Email: `prestataire.demo@eliteforce.local`
-- Password: `EliteForce123!`
-```
+- Name: `Mohamed El Amrani`
+- Role: `provider`
+
+Additional seeded provider accounts:
+
+- `alban.demo@eliteforce.local`
+- `juba.demo@eliteforce.local`
+- `hassen.demo@eliteforce.local`
 
 Generate and commit database types after any schema change:
 

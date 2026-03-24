@@ -66,6 +66,8 @@ export type TaskBooking = {
   address: string;
   address_details: string | null;
   category: ServiceCategory;
+  client_rated_at: string | null;
+  client_rating: number | null;
   created_at: string;
   currency_code: string;
   hourly_rate: number;

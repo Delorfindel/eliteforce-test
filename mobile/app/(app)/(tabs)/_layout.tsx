@@ -44,11 +44,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          href: isProvider ? null : undefined,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons color={color} name="magnify" size={size} />
-          ),
-          title: 'Recherche',
+          href: null,
         }}
       />
       <Tabs.Screen
