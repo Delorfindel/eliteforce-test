@@ -20,7 +20,7 @@ export const ServiceCard = React.memo(function ServiceCard({
   return (
     <Pressable
       accessibilityLabel={`Ouvrir ${service.title}`}
-      className={`overflow-hidden rounded-2xl bg-white shadow-sm ${
+      className={`overflow-hidden rounded-2xl bg-white shadow-sm border border-black/5 ${
         variant === "featured" ? "w-[280px]" : "w-full"
       }`}
       disabled={!onPress}

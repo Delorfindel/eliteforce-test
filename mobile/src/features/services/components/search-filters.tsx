@@ -1,5 +1,6 @@
 import React from "react";
 import { FlatList } from "react-native";
+import Slider from "@react-native-community/slider";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { MutedText, UIText } from "@/components/ui/text";
@@ -114,11 +115,12 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
                 </UIText>
               </View>
               <View className="py-2">
-                {/* <Slider
-                  defaultValue={maxPrice === null ? 1000 : maxPrice}
-                  maxValue={1000}
-                  minValue={50}
-                  onChange={(value) => {
+                <Slider
+                  maximumTrackTintColor="#E5E5E5"
+                  maximumValue={1000}
+                  minimumTrackTintColor="#0E7051"
+                  minimumValue={50}
+                  onSlidingComplete={(value) => {
                     const numValue = Math.round(value / 50) * 50;
                     if (numValue >= 1000) {
                       setMaxPrice(null);
@@ -127,12 +129,9 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
                     }
                   }}
                   step={50}
-                >
-                  <SliderTrack style={{ backgroundColor: "#E5E5E5" }}>
-                    <SliderFilledTrack style={{ backgroundColor: "#0E7051" }} />
-                  </SliderTrack>
-                  <SliderThumb style={{ backgroundColor: "#0E7051" }} />
-                </Slider> */}
+                  thumbTintColor="#0E7051"
+                  value={maxPrice === null ? 1000 : maxPrice}
+                />
               </View>
             </View>
 
