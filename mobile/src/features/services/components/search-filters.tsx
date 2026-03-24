@@ -1,9 +1,3 @@
-import {
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack
-} from "@gluestack-ui/themed";
 import React from "react";
 import { FlatList } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -120,7 +114,7 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
                 </UIText>
               </View>
               <View className="py-2">
-                <Slider
+                {/* <Slider
                   defaultValue={maxPrice === null ? 1000 : maxPrice}
                   maxValue={1000}
                   minValue={50}
@@ -138,7 +132,7 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
                     <SliderFilledTrack style={{ backgroundColor: "#0E7051" }} />
                   </SliderTrack>
                   <SliderThumb style={{ backgroundColor: "#0E7051" }} />
-                </Slider>
+                </Slider> */}
               </View>
             </View>
 

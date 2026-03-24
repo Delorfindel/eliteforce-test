@@ -7,7 +7,6 @@ import type { Session, User } from "@supabase/supabase-js";
 import React from "react";
 import { AppState, type AppStateStatus } from "react-native";
 
-import { GluestackUIProvider } from "@/components/ui/provider";
 import { queryClient } from "@/lib/query-client";
 import { supabase } from "@/lib/supabase";
 import { useUIStore } from "@/store/ui-store";
@@ -85,7 +84,6 @@ export function AppProviders({ children }: AppProvidersProps) {
   }, [setAuthHydrated]);
 
   return (
-    <GluestackUIProvider>
       <QueryClientProvider client={queryClient}>
         <AuthSessionContext.Provider
           value={{
@@ -97,7 +95,6 @@ export function AppProviders({ children }: AppProvidersProps) {
           {children}
         </AuthSessionContext.Provider>
       </QueryClientProvider>
-    </GluestackUIProvider>
   );
 }
 
