@@ -12,7 +12,7 @@ export function UIText({ className, ...props }: UITextProps) {
     <BaseText
       selectable
       {...props}
-      className={cn("font-sans text-base text-brand-ink", className)}
+      className={cn("font-inter text-base text-brand-ink", className)}
     />
   );
 }
@@ -21,7 +21,7 @@ export function Heading({ className, ...props }: UITextProps) {
   return (
     <UIText
       {...props}
-      className={cn("font-rounded text-3xl font-semibold text-brand-ink", className)}
+      className={cn("font-inter text-3xl font-semibold text-brand-ink", className)}
     />
   );
 }

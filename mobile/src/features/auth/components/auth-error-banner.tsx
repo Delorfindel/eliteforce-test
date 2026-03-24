@@ -13,7 +13,7 @@ export function AuthErrorBanner({ message }: AuthErrorBannerProps) {
   }
 
   return (
-    <View className="rounded-[20px] border border-brand-danger/20 bg-[#fef3f2] px-4 py-3">
+    <View className="rounded-xl border border-brand-danger/20 bg-[#fef3f2] px-4 py-3">
       <UIText className="text-sm text-brand-danger">{message}</UIText>
     </View>
   );

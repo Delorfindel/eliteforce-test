@@ -10,7 +10,7 @@ export default function NotFoundRoute() {
     <>
       <Stack.Screen options={{ title: "Not found" }} />
       <View className="flex-1 items-center justify-center bg-brand-sand px-8">
-        <View className="w-full max-w-sm gap-6 rounded-[28px] bg-brand-card p-8">
+        <View className="w-full max-w-sm gap-6 rounded-2xl bg-brand-card p-8">
           <Heading className="text-center text-2xl">This route does not exist</Heading>
           <MutedText className="text-center">
             The screen may have moved, or the link is no longer valid.

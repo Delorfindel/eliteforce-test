@@ -73,7 +73,7 @@ export function ProviderServicesManager({
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <View className="gap-4 rounded-[32px] bg-brand-card p-6 shadow-[0_12px_32px_rgba(24,35,40,0.08)]">
+    <View className="gap-4 rounded-2xl bg-brand-card p-6 shadow-sm">
       <View className="flex-row items-start justify-between gap-3">
         <View className="flex-1 gap-1">
           <UIText className="text-lg font-semibold">Mes services</UIText>
@@ -103,7 +103,7 @@ export function ProviderServicesManager({
           {servicesQuery.data.map((service) => (
             <View
               key={service.id}
-              className="gap-3 rounded-[24px] border border-brand-border bg-white p-4"
+              className="gap-3 rounded-xl border border-brand-border bg-white p-4"
             >
               <View className="flex-row items-start justify-between gap-3">
                 <View className="flex-1 gap-1">
@@ -115,7 +115,7 @@ export function ProviderServicesManager({
                 </View>
                 <View
                   className={`rounded-full px-3 py-1.5 ${
-                    service.is_active ? "bg-brand-mint" : "bg-brand-sand-strong"
+                    service.is_active ? "bg-brand-clay" : "bg-brand-sand-strong"
                   }`}
                 >
                   <UIText
@@ -147,7 +147,7 @@ export function ProviderServicesManager({
           ))}
         </View>
       ) : (
-        <View className="rounded-[24px] border border-dashed border-brand-border bg-white p-4">
+        <View className="rounded-xl border border-dashed border-brand-border bg-white p-4">
           <MutedText className="text-sm leading-6">
             Aucune prestation enregistree pour le moment. Ajoutez-en une pour la
             rendre visible dans la marketplace.

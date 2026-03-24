@@ -1,20 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import React from "react";
-import { FlatList } from "react-native";
+import { Animated, FlatList } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import { Button } from "@/components/ui/button";
 import { Heading, MutedText, UIText } from "@/components/ui/text";
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session";
 import { listCategories } from "@/features/services/api/list-categories";
 import { listTopProviderServices } from "@/features/services/api/list-top-provider-services";
 import { CategoryGrid } from "@/features/services/components/category-grid";
 import { ServiceCard } from "@/features/services/components/service-card";
-import { Pressable, ScrollView, View } from "@/tw";
+import { Pressable, View } from "@/tw";
+
+const HEADER_FULL = 170;
+const HEADER_COMPACT = 120;
 
 export default function HomeRoute() {
   const router = useRouter();
   const { profile } = useAuthSession();
+  const insets = useSafeAreaInsets();
   const categoriesQuery = useQuery({
     queryFn: listCategories,
     queryKey: ["service-categories"]
@@ -24,70 +29,147 @@ export default function HomeRoute() {
     queryKey: ["top-provider-services"]
   });
 
-  return (
-    <ScrollView
-      className="flex-1 bg-brand-sand"
-      contentContainerClassName="gap-6 px-5 pb-10 pt-6"
-      contentInsetAdjustmentBehavior="automatic"
+  const scrollY = React.useRef(new Animated.Value(0)).current;
+
+  // The total available scroll distance before the header is fully compact
+  const scrollDistance = HEADER_FULL - HEADER_COMPACT;
+
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, scrollDistance],
+    outputRange: [HEADER_FULL, HEADER_COMPACT],
+    extrapolate: "clamp"
+  });
+
+  const greetingOpacity = scrollY.interpolate({
+    inputRange: [0, scrollDistance / 2],
+    outputRange: [1, 0],
+    extrapolate: "clamp"
+  });
+
+  const greetingTranslateY = scrollY.interpolate({
+    inputRange: [0, scrollDistance],
+    outputRange: [0, -15],
+    extrapolate: "clamp"
+  });
+
+  const titleTranslateY = scrollY.interpolate({
+    inputRange: [0, scrollDistance],
+    outputRange: [0, -20],
+    extrapolate: "clamp"
+  });
+
+  const headerContent = (
+    <Animated.View
+      style={{
+        backgroundColor: "#FFFFFF",
+        borderBottomColor: "#E5E5E5",
+        borderBottomWidth: 0.5,
+        height: headerHeight,
+        paddingHorizontal: 20,
+        paddingTop: insets.top,
+        zIndex: 10
+      }}
     >
-      <View className="gap-3">
-        <MutedText className="text-sm uppercase tracking-[2px] text-brand-clay">
-          Marketplace de prestations
-        </MutedText>
-        <Heading>{`Bienvenue${profile?.first_name ? `, ${profile.first_name}` : ""}`}</Heading>
-        <MutedText className="text-base leading-7">
-          Trouve un prestataire fiable pour les travaux du quotidien.
-        </MutedText>
+      <View className="flex-1 justify-end pb-3">
+        <Animated.View
+          style={{
+            opacity: greetingOpacity,
+            transform: [{ translateY: greetingTranslateY }]
+          }}
+        >
+          <MutedText className="text-sm">
+            {`Bonjour${profile?.first_name ? `, ${profile.first_name}` : ""} 👋`}
+          </MutedText>
+        </Animated.View>
+
+        <Animated.View style={{ transform: [{ translateY: titleTranslateY }] }}>
+          <Heading className="text-[22px] leading-8">Que cherchez-vous ?</Heading>
+        </Animated.View>
+
+        <Pressable
+          className="mt-3 flex-row items-center gap-3 rounded-full bg-brand-sand-strong px-5 py-3"
+          onPress={() => router.push("/search")}
+        >
+          <MaterialCommunityIcons color="#A3A3A3" name="magnify" size={20} />
+          <MutedText className="text-sm">Plomberie, ménage, montage...</MutedText>
+        </Pressable>
       </View>
+    </Animated.View>
+  );
 
-      <Pressable
-        className="rounded-[28px] border border-brand-border bg-brand-card px-5 py-4"
-        onPress={() => router.push("/search")}
-      >
-        <MutedText className="text-base">
-          Rechercher une prestation, une categorie ou un budget
-        </MutedText>
-      </Pressable>
+  const sections = React.useMemo(() => {
+    const items: Array<{ key: string; type: "categories" | "services" }> = [
+      { key: "categories", type: "categories" },
+      { key: "services", type: "services" }
+    ];
+    return items;
+  }, []);
 
-      <View className="gap-4">
-        <View className="flex-row items-center justify-between">
-          <UIText className="text-lg font-semibold">Categories</UIText>
-          <Button className="min-h-10 px-4" onPress={() => router.push("/search")} variant="ghost">
-            Tout voir
-          </Button>
-        </View>
-        <CategoryGrid
-          categories={categoriesQuery.data ?? []}
-          onSelectCategory={(category) =>
-            router.push({
-              pathname: "/search",
-              params: { categoryId: String(category.id) }
-            })
+  return (
+    <View className="flex-1 bg-brand-sand">
+      {headerContent}
+
+      <FlatList
+        contentContainerStyle={{ paddingBottom: 32 }}
+        data={sections}
+        keyExtractor={(item) => item.key}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false }
+        )}
+        renderItem={({ item }) => {
+          if (item.type === "categories") {
+            return (
+              <View className="mt-6 gap-4">
+                <View className="flex-row items-center justify-between px-5">
+                  <UIText className="text-lg font-semibold">Catégories</UIText>
+                  <Pressable hitSlop={8} onPress={() => router.push("/search")}>
+                    <UIText className="text-sm font-semibold text-brand-clay">Tout voir</UIText>
+                  </Pressable>
+                </View>
+                <View className="px-5">
+                  <CategoryGrid
+                    categories={categoriesQuery.data ?? []}
+                    onSelectCategory={(category) =>
+                      router.push({
+                        pathname: "/search",
+                        params: { categoryId: String(category.id) }
+                      })
+                    }
+                  />
+                </View>
+              </View>
+            );
           }
-        />
-      </View>
 
-      <View className="gap-4">
-        <View className="flex-row items-center justify-between">
-          <UIText className="text-lg font-semibold">Top services</UIText>
-          <MutedText className="text-sm">Les mieux notes du moment</MutedText>
-        </View>
-        <FlatList
-          data={topServicesQuery.data ?? []}
-          horizontal
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <View className="mr-4">
-              <ServiceCard
-                onPress={() => router.push(`/services/${item.slug}`)}
-                service={item}
-                variant="featured"
+          return (
+            <View className="mt-6 gap-4">
+              <View className="flex-row items-center justify-between px-5">
+                <UIText className="text-lg font-semibold">Top services</UIText>
+                <UIText className="text-sm text-brand-ink-soft">Les mieux notés</UIText>
+              </View>
+              <FlatList
+                contentContainerStyle={{ paddingHorizontal: 20 }}
+                data={topServicesQuery.data ?? []}
+                horizontal
+                keyExtractor={(s) => String(s.id)}
+                renderItem={({ item: s }) => (
+                  <View className="mr-4">
+                    <ServiceCard
+                      onPress={() => router.push(`/services/${s.slug}`)}
+                      service={s}
+                      variant="featured"
+                    />
+                  </View>
+                )}
+                showsHorizontalScrollIndicator={false}
               />
             </View>
-          )}
-          showsHorizontalScrollIndicator={false}
-        />
-      </View>
-    </ScrollView>
+          );
+        }}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 }

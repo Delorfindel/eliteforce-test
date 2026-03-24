@@ -70,7 +70,7 @@ export function ProviderServiceForm({
   }, [form, initialService]);
 
   return (
-    <View className="gap-4 rounded-[28px] border border-brand-border bg-white p-5">
+    <View className="gap-4 rounded-2xl border border-brand-border bg-white p-5">
       <View className="gap-1">
         <UIText className="text-lg font-semibold text-brand-ink">
           {initialService ? "Modifier la prestation" : "Ajouter une prestation"}
@@ -96,7 +96,7 @@ export function ProviderServiceForm({
                     className={`rounded-full px-4 py-2.5 ${
                       isSelected
                         ? "bg-brand-clay"
-                        : "border border-brand-border bg-brand-card"
+                        : "bg-brand-sand-strong"
                     }`}
                     onPress={() => field.onChange(category.id)}
                   >

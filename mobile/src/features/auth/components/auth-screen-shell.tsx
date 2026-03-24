@@ -37,7 +37,7 @@ export function AuthScreenShell({
           <MutedText className="text-base leading-7">{description}</MutedText>
         </View>
 
-        <View className="gap-5 rounded-[32px] bg-brand-card p-6 shadow-[0_12px_32px_rgba(24,35,40,0.08)]">
+        <View className="gap-5 rounded-2xl bg-brand-card p-6 shadow-sm">
           {children}
         </View>
 

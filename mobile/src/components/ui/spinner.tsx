@@ -8,7 +8,7 @@ type SpinnerProps = {
 
 export function Spinner({
   size = "small",
-  color = "#0f766e"
+  color = "#0E7051"
 }: SpinnerProps) {
   return <ActivityIndicator color={color} size={size} />;
 }

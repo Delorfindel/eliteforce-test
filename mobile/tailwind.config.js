@@ -6,23 +6,37 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          sand: "#f6efe4",
-          "sand-strong": "#ebdecd",
-          clay: "#b2502d",
-          "clay-strong": "#8c3c20",
-          ink: "#182328",
-          "ink-soft": "#49565d",
-          mint: "#0f766e",
-          gold: "#e6b94c",
-          card: "#fffaf3",
-          border: "#e7d7c3",
-          danger: "#b42318",
-          success: "#166534"
+          sand: "#FFFFFF",
+          "sand-strong": "#F4F4F4",
+          "accent-light": "#F0F9F3",
+          clay: "#0E7051",
+          "clay-strong": "#0A6B40",
+          ink: "#0A0A0A",
+          "ink-soft": "#525252",
+          mint: "#0E7051",
+          gold: "#F59E0B",
+          card: "#FAFAFA",
+          border: "#E5E5E5",
+          danger: "#DC2626",
+          success: "#16A34A"
         }
       },
       fontFamily: {
-        sans: ["System"],
-        rounded: ["System"]
+        inter: ["Inter"],
+        sans: ["Inter"],
+        rounded: ["Inter"]
+      },
+      borderRadius: {
+        sm: "8px",
+        md: "12px",
+        lg: "16px",
+        xl: "24px",
+        full: "9999px"
+      },
+      boxShadow: {
+        sm: "0 1px 2px rgba(0,0,0,0.05)",
+        md: "0 4px 6px rgba(0,0,0,0.07)",
+        lg: "0 10px 15px rgba(0,0,0,0.1)"
       }
     }
   }

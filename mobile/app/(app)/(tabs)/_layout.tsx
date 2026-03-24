@@ -6,19 +6,20 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
+        headerShown: false,
         headerShadowVisible: false,
         headerStyle: {
-          backgroundColor: "#f6efe4"
+          backgroundColor: "#FFFFFF"
         },
-        headerTintColor: "#182328",
+        headerTintColor: "#0A0A0A",
         sceneStyle: {
-          backgroundColor: "#f6efe4"
+          backgroundColor: "#FFFFFF"
         },
-        tabBarActiveTintColor: "#b2502d",
-        tabBarInactiveTintColor: "#6b7680",
+        tabBarActiveTintColor: "#0E7051",
+        tabBarInactiveTintColor: "#A3A3A3",
         tabBarStyle: {
-          backgroundColor: "#fffaf3",
-          borderTopColor: "#e7d7c3"
+          backgroundColor: "#FFFFFF",
+          borderTopColor: "#E5E5E5"
         }
       }}
     >
@@ -46,7 +47,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons color={color} name="calendar-clock" size={size} />
           ),
-          title: "Bookings"
+          title: "Réservations"
         }}
       />
       <Tabs.Screen
@@ -55,7 +56,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons color={color} name="account-circle" size={size} />
           ),
-          title: "Profile"
+          title: "Profil"
         }}
       />
     </Tabs>

@@ -1,4 +1,5 @@
 import React from "react";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { MutedText, UIText } from "@/components/ui/text";
 import { Image } from "@/tw/image";
@@ -19,7 +20,7 @@ export const ServiceCard = React.memo(function ServiceCard({
   return (
     <Pressable
       accessibilityLabel={`Ouvrir ${service.title}`}
-      className={`overflow-hidden rounded-[28px] bg-brand-card shadow-[0_12px_32px_rgba(24,35,40,0.08)] ${
+      className={`overflow-hidden rounded-2xl bg-white shadow-sm ${
         variant === "featured" ? "w-[280px]" : "w-full"
       }`}
       disabled={!onPress}
@@ -27,9 +28,7 @@ export const ServiceCard = React.memo(function ServiceCard({
     >
       <Image
         cachePolicy="memory-disk"
-        className={`w-full ${
-          variant === "featured" ? "h-40" : "h-44"
-        }`}
+        className={`w-full ${variant === "featured" ? "h-36" : "h-48"}`}
         contentFit="cover"
         recyclingKey={String(service.id)}
         source={
@@ -38,31 +37,42 @@ export const ServiceCard = React.memo(function ServiceCard({
         }
         transition={200}
       />
-      <View className="gap-3 p-5">
-        <View className="gap-2">
-          <View className="flex-row items-center justify-between gap-3">
-            <MutedText className="text-xs uppercase tracking-[1.5px] text-brand-clay">
+      <View className="gap-2 p-4">
+        <View className="flex-row items-center gap-2">
+          <View className="rounded-full bg-brand-accent-light px-2.5 py-1">
+            <UIText className="text-xs font-semibold text-brand-clay">
               {service.category.name}
-            </MutedText>
+            </UIText>
+          </View>
+          <View className="flex-1" />
+          <View className="flex-row items-center gap-1">
+            <MaterialCommunityIcons color="#F59E0B" name="star" size={14} />
+            <UIText className="text-xs font-semibold text-brand-ink">
+              {service.rating.toFixed(1)}
+            </UIText>
             <MutedText className="text-xs">
-              {service.rating.toFixed(1)} ({service.review_count})
+              ({service.review_count})
             </MutedText>
           </View>
-          <UIText className="text-lg font-semibold text-brand-ink">
-            {service.title}
-          </UIText>
-          <MutedText className="text-sm leading-6" numberOfLines={2}>
+        </View>
+
+        <UIText className="text-base font-semibold text-brand-ink" numberOfLines={1}>
+          {service.title}
+        </UIText>
+
+        {variant === "list" ? (
+          <MutedText className="text-sm leading-5" numberOfLines={2}>
             {service.short_description}
           </MutedText>
-          <MutedText className="text-sm">
-            Par {service.provider.full_name}
-          </MutedText>
-        </View>
-        <View className="flex-row items-center justify-between">
-          <UIText className="text-base font-semibold text-brand-clay">
-            {service.hourly_rate.toFixed(2)} MAD / h
+        ) : null}
+
+        <View className="flex-row items-center justify-between pt-1">
+          <UIText className="text-base font-bold text-brand-clay">
+            {service.hourly_rate.toFixed(0)} MAD/h
           </UIText>
-          <UIText className="text-sm text-brand-ink-soft">Voir le detail</UIText>
+          <MutedText className="text-xs">
+            {service.provider.full_name}
+          </MutedText>
         </View>
       </View>
     </Pressable>

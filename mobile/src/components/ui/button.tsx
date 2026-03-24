@@ -15,14 +15,14 @@ type ButtonProps = React.ComponentProps<typeof Pressable> & {
 
 const buttonVariants = {
   primary: "bg-brand-clay",
-  secondary: "bg-brand-mint",
+  secondary: "border border-brand-clay bg-transparent",
   ghost: "bg-transparent border border-brand-border",
   danger: "bg-brand-danger"
 } as const;
 
 const textVariants = {
   primary: "text-white",
-  secondary: "text-white",
+  secondary: "text-brand-clay",
   ghost: "text-brand-ink",
   danger: "text-white"
 } as const;
@@ -48,14 +48,14 @@ export function Button({
       disabled={isDisabled}
       {...props}
       className={cn(
-        "min-h-14 items-center justify-center rounded-[24px] px-5",
+        "min-h-14 items-center justify-center rounded-full px-5",
         buttonVariants[variant],
         isDisabled && "opacity-60",
         className
       )}
     >
       {loading ? (
-        <Spinner color={variant === "ghost" ? "#182328" : "#ffffff"} />
+        <Spinner color={variant === "ghost" ? "#0A0A0A" : "#ffffff"} />
       ) : (
         <UIText
           className={cn(
