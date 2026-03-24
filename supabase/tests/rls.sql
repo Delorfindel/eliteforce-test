@@ -6,17 +6,19 @@ declare
   other_provider_id uuid := '22222222-2222-2222-2222-222222222222';
   client_id uuid := '33333333-3333-3333-3333-333333333333';
   plomberie_category_id bigint;
+  electricite_category_id bigint;
+  demenagement_category_id bigint;
   own_visible_count integer;
   other_visible_count integer;
   other_profile_updates integer;
-  own_service_updates integer;
-  other_service_updates integer;
+  own_offering_updates integer;
+  other_offering_updates integer;
   own_inactive_visible_count integer;
   other_inactive_visible_count integer;
-  inserted_service_id bigint;
+  inserted_offering_id bigint;
   category_count integer;
   public_provider_count integer;
-  public_service_count integer;
+  public_offering_count integer;
   public_review_count integer;
   role_change_blocked boolean := false;
   client_insert_blocked boolean := false;
@@ -41,15 +43,25 @@ begin
     select 1
     from pg_indexes
     where schemaname = 'public'
-      and indexname = 'provider_services_category_hourly_rate_idx'
+      and indexname = 'provider_category_offerings_search_idx'
   ) then
-    raise exception 'Expected provider_services_category_hourly_rate_idx to exist.';
+    raise exception 'Expected provider_category_offerings_search_idx to exist.';
   end if;
 
   select id
   into plomberie_category_id
   from public.service_categories
   where slug = 'plomberie';
+
+  select id
+  into electricite_category_id
+  from public.service_categories
+  where slug = 'electricite';
+
+  select id
+  into demenagement_category_id
+  from public.service_categories
+  where slug = 'demenagement';
 
   insert into auth.users (
     id,
@@ -151,65 +163,51 @@ begin
     )
   on conflict (profile_id) do nothing;
 
-  insert into public.provider_services (
+  insert into public.provider_category_offerings (
     provider_id,
     category_id,
-    slug,
-    title,
-    short_description,
-    description,
     hourly_rate,
-    rating,
-    review_count,
+    completed_task_count,
+    next_available_at,
     is_active
   )
   values
     (
       provider_owner_id,
       plomberie_category_id,
-      'provider-owner-active-test',
-      'Provider owner active',
-      'Active service',
-      'Active service description',
       150,
-      4.8,
       2,
+      timezone('utc', now()) + interval '2 days',
       true
     ),
     (
       provider_owner_id,
-      plomberie_category_id,
-      'provider-owner-inactive-test',
-      'Provider owner inactive',
-      'Inactive service',
-      'Inactive service description',
+      electricite_category_id,
       140,
-      4.2,
       0,
+      timezone('utc', now()) + interval '10 days',
       false
     ),
     (
       other_provider_id,
       plomberie_category_id,
-      'provider-other-inactive-test',
-      'Provider other inactive',
-      'Other inactive service',
-      'Other inactive service description',
       130,
-      4.5,
       0,
+      timezone('utc', now()) + interval '12 days',
       false
     )
-  on conflict (slug) do nothing;
+  on conflict (provider_id, category_id) do nothing;
 
-  insert into public.service_reviews (
-    service_id,
+  insert into public.provider_reviews (
+    provider_id,
+    category_id,
     author_name,
     rating,
     comment
   )
   values (
-    (select id from public.provider_services where slug = 'provider-owner-active-test'),
+    provider_owner_id,
+    plomberie_category_id,
     'Fixture reviewer',
     5,
     'Excellent fixture review.'
@@ -242,47 +240,47 @@ begin
       role_change_blocked := true;
   end;
 
-  update public.provider_services
-  set title = 'Updated by owner'
-  where slug = 'provider-owner-active-test';
+  update public.provider_category_offerings
+  set hourly_rate = 155
+  where provider_id = provider_owner_id
+    and category_id = plomberie_category_id;
 
-  get diagnostics own_service_updates = row_count;
+  get diagnostics own_offering_updates = row_count;
 
-  update public.provider_services
-  set title = 'Should not update other provider'
-  where slug = 'provider-other-inactive-test';
+  update public.provider_category_offerings
+  set hourly_rate = 135
+  where provider_id = other_provider_id
+    and category_id = plomberie_category_id;
 
-  get diagnostics other_service_updates = row_count;
+  get diagnostics other_offering_updates = row_count;
 
   select count(*) into own_inactive_visible_count
-  from public.provider_services
-  where slug = 'provider-owner-inactive-test';
+  from public.provider_category_offerings
+  where provider_id = provider_owner_id
+    and category_id = electricite_category_id;
 
   select count(*) into other_inactive_visible_count
-  from public.provider_services
-  where slug = 'provider-other-inactive-test';
+  from public.provider_category_offerings
+  where provider_id = other_provider_id
+    and category_id = plomberie_category_id;
 
-  insert into public.provider_services (
+  insert into public.provider_category_offerings (
     provider_id,
     category_id,
-    slug,
-    title,
-    short_description,
-    description,
     hourly_rate,
+    completed_task_count,
+    next_available_at,
     is_active
   )
   values (
     provider_owner_id,
-    plomberie_category_id,
-    'provider-owner-inserted-test',
-    'Provider owner inserted',
-    'Inserted through authenticated policy',
-    'Inserted through authenticated policy for ownership verification.',
+    demenagement_category_id,
     175,
+    0,
+    timezone('utc', now()) + interval '1 day',
     true
   )
-  returning id into inserted_service_id;
+  returning id into inserted_offering_id;
 
   reset role;
 
@@ -291,24 +289,20 @@ begin
   execute 'set local role authenticated';
 
   begin
-    insert into public.provider_services (
+    insert into public.provider_category_offerings (
       provider_id,
       category_id,
-      slug,
-      title,
-      short_description,
-      description,
       hourly_rate,
+      completed_task_count,
+      next_available_at,
       is_active
     )
     values (
       client_id,
       plomberie_category_id,
-      'client-should-not-insert',
-      'Client insert blocked',
-      'Should fail',
-      'Clients must not be able to create provider services.',
       120,
+      0,
+      timezone('utc', now()) + interval '3 days',
       true
     );
   exception
@@ -324,8 +318,8 @@ begin
 
   select count(*) into category_count from public.service_categories;
   select count(*) into public_provider_count from public.provider_profiles;
-  select count(*) into public_service_count from public.provider_services;
-  select count(*) into public_review_count from public.service_reviews;
+  select count(*) into public_offering_count from public.provider_category_offerings;
+  select count(*) into public_review_count from public.provider_reviews;
 
   reset role;
 
@@ -345,28 +339,28 @@ begin
     raise exception 'Authenticated users must not be able to change their own role.';
   end if;
 
-  if own_service_updates <> 1 then
-    raise exception 'Provider owner should be able to update their own service.';
+  if own_offering_updates <> 1 then
+    raise exception 'Provider owner should be able to update their own offering.';
   end if;
 
-  if other_service_updates <> 0 then
-    raise exception 'Provider owner should not be able to update another provider service.';
+  if other_offering_updates <> 0 then
+    raise exception 'Provider owner should not be able to update another provider offering.';
   end if;
 
   if own_inactive_visible_count <> 1 then
-    raise exception 'Provider owner should be able to read their own inactive service.';
+    raise exception 'Provider owner should be able to read their own inactive offering.';
   end if;
 
   if other_inactive_visible_count <> 0 then
-    raise exception 'Provider owner should not be able to read another provider inactive service.';
+    raise exception 'Provider owner should not be able to read another provider inactive offering.';
   end if;
 
-  if inserted_service_id is null then
-    raise exception 'Provider owner should be able to insert their own service.';
+  if inserted_offering_id is null then
+    raise exception 'Provider owner should be able to insert their own offering.';
   end if;
 
   if not client_insert_blocked then
-    raise exception 'Clients should not be able to insert provider services.';
+    raise exception 'Clients should not be able to insert provider offerings.';
   end if;
 
   if category_count <> 7 then
@@ -377,8 +371,8 @@ begin
     raise exception 'Expected at least one public provider profile.';
   end if;
 
-  if public_service_count < 5 then
-    raise exception 'Expected at least 5 public active provider services but found %.', public_service_count;
+  if public_offering_count < 5 then
+    raise exception 'Expected at least 5 public active provider offerings but found %.', public_offering_count;
   end if;
 
   if public_review_count < 12 then

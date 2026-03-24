@@ -1,4 +1,4 @@
-import { expect, jest, test } from '@jest/globals';
+import { expect, test } from '@jest/globals';
 import { passwordConfirmationSchema } from '@/features/auth/schemas/password-schema';
 import { resolveRecoveryParams } from '@/features/auth/utils/recovery-params';
 import { establishRecoverySession } from '@/features/auth/utils/recovery-session';
@@ -17,13 +17,20 @@ test('rejects mismatched password confirmation', () => {
 });
 
 test('hydrates the recovery session from access and refresh tokens', async () => {
-  const auth = {
-    setSession: jest.fn().mockResolvedValue({ error: null } as never),
-    verifyOtp: jest.fn(),
+  const setSessionCalls: Array<{
+    access_token: string;
+    refresh_token: string;
+  }> = [];
+  const auth: Parameters<typeof establishRecoverySession>[0]['auth'] = {
+    setSession: async (session) => {
+      setSessionCalls.push(session);
+      return { error: null };
+    },
+    verifyOtp: async () => ({ error: null }),
   };
 
   const result = await establishRecoverySession({
-    auth: auth as any,
+    auth,
     isAuthenticated: false,
     recoveryParams: {
       access_token: 'access-token',
@@ -32,10 +39,12 @@ test('hydrates the recovery session from access and refresh tokens', async () =>
   });
 
   expect(result).toBe('session');
-  expect(auth.setSession).toHaveBeenCalledWith({
-    access_token: 'access-token',
-    refresh_token: 'refresh-token',
-  });
+  expect(setSessionCalls).toEqual([
+    {
+      access_token: 'access-token',
+      refresh_token: 'refresh-token',
+    },
+  ]);
 });
 
 test('parses fragment-based recovery tokens from deep links', () => {
@@ -53,14 +62,14 @@ test('parses fragment-based recovery tokens from deep links', () => {
 });
 
 test('rejects invalid recovery links when there is no active authenticated session', async () => {
-  const auth = {
-    setSession: jest.fn(),
-    verifyOtp: jest.fn(),
+  const auth: Parameters<typeof establishRecoverySession>[0]['auth'] = {
+    setSession: async () => ({ error: null }),
+    verifyOtp: async () => ({ error: null }),
   };
 
   await expect(
     establishRecoverySession({
-      auth: auth as any,
+      auth,
       isAuthenticated: false,
       recoveryParams: {},
     }),

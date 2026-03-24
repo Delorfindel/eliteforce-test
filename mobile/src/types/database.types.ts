@@ -32,6 +32,8 @@ export type Database = {
         Row: {
           accepted_terms_at: string;
           created_at: string;
+          default_address: string | null;
+          default_address_details: string | null;
           email: string;
           first_name: string;
           id: string;
@@ -43,6 +45,8 @@ export type Database = {
         Insert: {
           accepted_terms_at: string;
           created_at?: string;
+          default_address?: string | null;
+          default_address_details?: string | null;
           email: string;
           first_name: string;
           id: string;
@@ -54,6 +58,8 @@ export type Database = {
         Update: {
           accepted_terms_at?: string;
           created_at?: string;
+          default_address?: string | null;
+          default_address_details?: string | null;
           email?: string;
           first_name?: string;
           id?: string;
@@ -72,9 +78,12 @@ export type Database = {
           created_at: string;
           headline: string;
           is_active: boolean;
+          is_elite: boolean;
+          languages: string[];
           profile_id: string;
           rating: number;
           review_count: number;
+          tools: string[];
           updated_at: string;
         };
         Insert: {
@@ -84,9 +93,12 @@ export type Database = {
           created_at?: string;
           headline: string;
           is_active?: boolean;
+          is_elite?: boolean;
+          languages?: string[];
           profile_id: string;
           rating?: number;
           review_count?: number;
+          tools?: string[];
           updated_at?: string;
         };
         Update: {
@@ -96,9 +108,12 @@ export type Database = {
           created_at?: string;
           headline?: string;
           is_active?: boolean;
+          is_elite?: boolean;
+          languages?: string[];
           profile_id?: string;
           rating?: number;
           review_count?: number;
+          tools?: string[];
           updated_at?: string;
         };
         Relationships: [
@@ -111,65 +126,95 @@ export type Database = {
           },
         ];
       };
-      provider_services: {
+      provider_category_offerings: {
         Row: {
           category_id: number;
-          cover_image_url: string | null;
+          completed_task_count: number;
           created_at: string;
-          description: string;
           hourly_rate: number;
           id: number;
           is_active: boolean;
+          next_available_at: string | null;
           provider_id: string;
-          rating: number;
-          review_count: number;
-          short_description: string;
-          slug: string;
-          title: string;
           updated_at: string;
         };
         Insert: {
           category_id: number;
-          cover_image_url?: string | null;
+          completed_task_count?: number;
           created_at?: string;
-          description: string;
           hourly_rate: number;
           id?: never;
           is_active?: boolean;
+          next_available_at?: string | null;
           provider_id: string;
-          rating?: number;
-          review_count?: number;
-          short_description: string;
-          slug: string;
-          title: string;
           updated_at?: string;
         };
         Update: {
           category_id?: number;
-          cover_image_url?: string | null;
+          completed_task_count?: number;
           created_at?: string;
-          description?: string;
           hourly_rate?: number;
           id?: never;
           is_active?: boolean;
+          next_available_at?: string | null;
           provider_id?: string;
-          rating?: number;
-          review_count?: number;
-          short_description?: string;
-          slug?: string;
-          title?: string;
           updated_at?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'provider_services_category_id_fkey';
+            foreignKeyName: 'provider_category_offerings_category_id_fkey';
             columns: ['category_id'];
             isOneToOne: false;
             referencedRelation: 'service_categories';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'provider_services_provider_id_fkey';
+            foreignKeyName: 'provider_category_offerings_provider_id_fkey';
+            columns: ['provider_id'];
+            isOneToOne: false;
+            referencedRelation: 'provider_profiles';
+            referencedColumns: ['profile_id'];
+          },
+        ];
+      };
+      provider_reviews: {
+        Row: {
+          author_name: string;
+          category_id: number | null;
+          comment: string;
+          created_at: string;
+          id: number;
+          provider_id: string;
+          rating: number;
+        };
+        Insert: {
+          author_name: string;
+          category_id?: number | null;
+          comment: string;
+          created_at?: string;
+          id?: never;
+          provider_id: string;
+          rating: number;
+        };
+        Update: {
+          author_name?: string;
+          category_id?: number | null;
+          comment?: string;
+          created_at?: string;
+          id?: never;
+          provider_id?: string;
+          rating?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'provider_reviews_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'service_categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'provider_reviews_provider_id_fkey';
             columns: ['provider_id'];
             isOneToOne: false;
             referencedRelation: 'provider_profiles';
@@ -204,38 +249,89 @@ export type Database = {
         };
         Relationships: [];
       };
-      service_reviews: {
+      task_bookings: {
         Row: {
-          author_name: string;
-          comment: string;
+          address: string;
+          address_details: string | null;
+          category_id: number;
+          client_id: string;
           created_at: string;
+          currency_code: string;
+          hourly_rate: number;
           id: number;
-          rating: number;
-          service_id: number;
+          notes: string | null;
+          offering_id: number | null;
+          payment_status: string;
+          provider_id: string;
+          scheduled_for: string;
+          status: string;
+          total_price: number;
+          updated_at: string;
         };
         Insert: {
-          author_name: string;
-          comment: string;
+          address: string;
+          address_details?: string | null;
+          category_id: number;
+          client_id: string;
           created_at?: string;
+          currency_code?: string;
+          hourly_rate: number;
           id?: never;
-          rating: number;
-          service_id: number;
+          notes?: string | null;
+          offering_id?: number | null;
+          payment_status?: string;
+          provider_id: string;
+          scheduled_for: string;
+          status?: string;
+          total_price: number;
+          updated_at?: string;
         };
         Update: {
-          author_name?: string;
-          comment?: string;
+          address?: string;
+          address_details?: string | null;
+          category_id?: number;
+          client_id?: string;
           created_at?: string;
+          currency_code?: string;
+          hourly_rate?: number;
           id?: never;
-          rating?: number;
-          service_id?: number;
+          notes?: string | null;
+          offering_id?: number | null;
+          payment_status?: string;
+          provider_id?: string;
+          scheduled_for?: string;
+          status?: string;
+          total_price?: number;
+          updated_at?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'service_reviews_service_id_fkey';
-            columns: ['service_id'];
+            foreignKeyName: 'task_bookings_category_id_fkey';
+            columns: ['category_id'];
             isOneToOne: false;
-            referencedRelation: 'provider_services';
+            referencedRelation: 'service_categories';
             referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'task_bookings_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'task_bookings_offering_id_fkey';
+            columns: ['offering_id'];
+            isOneToOne: false;
+            referencedRelation: 'provider_category_offerings';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'task_bookings_provider_id_fkey';
+            columns: ['provider_id'];
+            isOneToOne: false;
+            referencedRelation: 'provider_profiles';
+            referencedColumns: ['profile_id'];
           },
         ];
       };

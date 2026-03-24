@@ -69,13 +69,13 @@ function parseRecoveryParamsFromUrl(url?: string) {
     segments.push(url.slice(hashIndex + 1));
   }
 
-  return segments.reduce<Partial<RecoveryParams>>(
-    (accumulator, segment) => ({
-      ...accumulator,
-      ...parseParamString(segment),
-    }),
-    {},
-  );
+  const result: Partial<RecoveryParams> = {};
+
+  for (const segment of segments) {
+    Object.assign(result, parseParamString(segment));
+  }
+
+  return result;
 }
 
 export function resolveRecoveryParams(params: RecoveryParamsInput, url?: string): RecoveryParams {

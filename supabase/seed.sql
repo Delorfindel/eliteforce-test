@@ -1,10 +1,10 @@
 insert into public.service_categories (slug, name, icon_key, sort_order)
 values
-  ('menage', 'Menage', 'broom', 1),
+  ('menage', 'Ménage', 'broom', 1),
   ('plomberie', 'Plomberie', 'pipe-wrench', 2),
-  ('electricite', 'Electricite', 'lightning-bolt-outline', 3),
+  ('electricite', 'Électricité', 'lightning-bolt-outline', 3),
   ('jardinage', 'Jardinage', 'leaf-circle-outline', 4),
-  ('demenagement', 'Demenagement', 'truck-delivery-outline', 5),
+  ('demenagement', 'Déménagement', 'truck-delivery-outline', 5),
   ('peinture', 'Peinture', 'format-paint', 6),
   ('montage-meuble', 'Montage de meubles', 'hammer-screwdriver', 7);
 
@@ -127,6 +127,9 @@ insert into public.provider_profiles (
   review_count,
   completed_missions_count,
   is_active,
+  tools,
+  languages,
+  is_elite,
   created_at,
   updated_at
 )
@@ -139,21 +142,310 @@ values (
   12,
   86,
   true,
+  array['Perceuse', 'Tournevis', 'Niveau'],
+  array['Francais', 'Anglais'],
+  true,
   '2022-06-14T09:30:00Z',
   timezone('utc', now())
 );
 
-insert into public.provider_services (
+insert into auth.users (
+  instance_id,
+  id,
+  aud,
+  role,
+  email,
+  encrypted_password,
+  email_confirmed_at,
+  invited_at,
+  confirmation_token,
+  confirmation_sent_at,
+  recovery_token,
+  recovery_sent_at,
+  email_change_token_new,
+  email_change,
+  email_change_sent_at,
+  last_sign_in_at,
+  raw_app_meta_data,
+  raw_user_meta_data,
+  is_super_admin,
+  created_at,
+  updated_at,
+  phone,
+  phone_confirmed_at,
+  phone_change,
+  phone_change_token,
+  phone_change_sent_at,
+  email_change_token_current,
+  email_change_confirm_status,
+  banned_until,
+  reauthentication_token,
+  reauthentication_sent_at,
+  is_sso_user,
+  deleted_at,
+  is_anonymous
+)
+values
+  (
+    '00000000-0000-0000-0000-000000000000',
+    'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
+    'authenticated',
+    'authenticated',
+    'alban.demo@eliteforce.local',
+    extensions.crypt('EliteForce123!', extensions.gen_salt('bf')),
+    timezone('utc', now()),
+    null,
+    '',
+    null,
+    '',
+    null,
+    '',
+    '',
+    null,
+    null,
+    '{"provider":"email","providers":["email"]}'::jsonb,
+    jsonb_build_object(
+      'first_name', 'Alban',
+      'last_name', 'Noel',
+      'phone', '+212612345682',
+      'accepted_terms_at', timezone('utc', now())
+    ),
+    false,
+    timezone('utc', now()),
+    timezone('utc', now()),
+    null,
+    null,
+    '',
+    '',
+    null,
+    '',
+    0,
+    null,
+    '',
+    null,
+    false,
+    null,
+    false
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
+    'authenticated',
+    'authenticated',
+    'juba.demo@eliteforce.local',
+    extensions.crypt('EliteForce123!', extensions.gen_salt('bf')),
+    timezone('utc', now()),
+    null,
+    '',
+    null,
+    '',
+    null,
+    '',
+    '',
+    null,
+    null,
+    '{"provider":"email","providers":["email"]}'::jsonb,
+    jsonb_build_object(
+      'first_name', 'Juba',
+      'last_name', 'Amar',
+      'phone', '+212612345683',
+      'accepted_terms_at', timezone('utc', now())
+    ),
+    false,
+    timezone('utc', now()),
+    timezone('utc', now()),
+    null,
+    null,
+    '',
+    '',
+    null,
+    '',
+    0,
+    null,
+    '',
+    null,
+    false,
+    null,
+    false
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+    'authenticated',
+    'authenticated',
+    'hassen.demo@eliteforce.local',
+    extensions.crypt('EliteForce123!', extensions.gen_salt('bf')),
+    timezone('utc', now()),
+    null,
+    '',
+    null,
+    '',
+    null,
+    '',
+    '',
+    null,
+    null,
+    '{"provider":"email","providers":["email"]}'::jsonb,
+    jsonb_build_object(
+      'first_name', 'Hassen',
+      'last_name', 'Ait',
+      'phone', '+212612345684',
+      'accepted_terms_at', timezone('utc', now())
+    ),
+    false,
+    timezone('utc', now()),
+    timezone('utc', now()),
+    null,
+    null,
+    '',
+    '',
+    null,
+    '',
+    0,
+    null,
+    '',
+    null,
+    false,
+    null,
+    false
+  );
+
+insert into auth.identities (
   provider_id,
-  category_id,
-  slug,
-  title,
-  short_description,
-  description,
-  hourly_rate,
-  cover_image_url,
+  user_id,
+  identity_data,
+  provider,
+  last_sign_in_at,
+  created_at,
+  updated_at,
+  id
+)
+values
+  (
+    'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
+    'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
+    jsonb_build_object(
+      'sub', 'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
+      'email', 'alban.demo@eliteforce.local',
+      'email_verified', true,
+      'phone_verified', false
+    ),
+    'email',
+    null,
+    timezone('utc', now()),
+    timezone('utc', now()),
+    'f3732e4a-2d49-44c8-8bc1-4b65d74be118'
+  ),
+  (
+    '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
+    '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
+    jsonb_build_object(
+      'sub', '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
+      'email', 'juba.demo@eliteforce.local',
+      'email_verified', true,
+      'phone_verified', false
+    ),
+    'email',
+    null,
+    timezone('utc', now()),
+    timezone('utc', now()),
+    'f2e852d5-0115-4896-83dc-32878d189864'
+  ),
+  (
+    '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+    '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+    jsonb_build_object(
+      'sub', '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+      'email', 'hassen.demo@eliteforce.local',
+      'email_verified', true,
+      'phone_verified', false
+    ),
+    'email',
+    null,
+    timezone('utc', now()),
+    timezone('utc', now()),
+    '82d4e5af-75fd-4c20-a078-3efc49c4b6fe'
+  );
+
+update public.profiles
+set
+  role = 'provider',
+  updated_at = timezone('utc', now())
+where id in (
+  'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
+  '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
+  '9a300bb4-6ef7-41fd-b289-2f976e455d24'
+);
+
+insert into public.provider_profiles (
+  profile_id,
+  avatar_url,
+  headline,
+  bio,
   rating,
   review_count,
+  completed_missions_count,
+  is_active,
+  tools,
+  languages,
+  is_elite,
+  created_at,
+  updated_at
+)
+values
+  (
+    'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
+    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
+    'Monteur de meubles et fixations murales',
+    'Ancien monteur chez Ikea, j interviens rapidement pour le montage de meubles, les fixations et les petits ajustements a domicile. Travail propre, ponctuel et soigne.',
+    5.0,
+    1188,
+    1859,
+    true,
+    array['Perceuse', 'Visseuse', 'Niveau laser'],
+    array['Francais', 'Anglais'],
+    false,
+    '2021-01-05T09:00:00Z',
+    timezone('utc', now())
+  ),
+  (
+    '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
+    'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=600&q=80',
+    'Montage de meubles et bricolage',
+    'Je monte vos meubles, perce proprement et gere les petits travaux du quotidien avec une communication claire avant et apres chaque intervention.',
+    5.0,
+    142,
+    255,
+    true,
+    array['Perceuse', 'Chevilles', 'Boite a outils'],
+    array['Francais', 'Arabe'],
+    true,
+    '2022-03-10T10:00:00Z',
+    timezone('utc', now())
+  ),
+  (
+    '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+    'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80',
+    'Assemblage, accrochage et aide au demenagement',
+    'Habitude des appartements parisiens, j aide sur les montages, fixations et manutentions avec une approche calme et organisee.',
+    5.0,
+    53,
+    164,
+    true,
+    array['Sangles', 'Perceuse', 'Escabeau'],
+    array['Francais'],
+    false,
+    '2023-02-18T08:45:00Z',
+    timezone('utc', now())
+  );
+
+
+insert into public.provider_category_offerings (
+  provider_id,
+  category_id,
+  hourly_rate,
+  completed_task_count,
+  next_available_at,
   is_active,
   created_at,
   updated_at
@@ -161,97 +453,68 @@ insert into public.provider_services (
 values
   (
     '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
-    (select id from public.service_categories where slug = 'plomberie'),
-    'reparation-fuite-cuisine-casablanca',
-    'Reparation de fuite en cuisine',
-    'Diagnostic rapide, remplacement de joints et remise en etat propre.',
-    'Je prends en charge les fuites sous evier, les robinets qui gouttent et les petits depannages de cuisine. L intervention comprend le diagnostic, les ajustements necessaires et la verification finale pour laisser une installation propre et fonctionnelle.',
-    220.00,
-    'https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=1200&q=80',
-    4.8,
-    3,
+    (select id from public.service_categories where slug = 'montage-meuble'),
+    39.90,
+    126,
+    '2026-03-25T09:00:00Z',
     true,
-    '2024-02-10T08:30:00Z',
+    timezone('utc', now()),
     timezone('utc', now())
   ),
   (
     '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
     (select id from public.service_categories where slug = 'plomberie'),
-    'installation-chauffe-eau',
-    'Installation de chauffe-eau',
-    'Pose, raccordement et tests de securite pour chauffe-eau domestique.',
-    'Je gere l installation d un nouveau chauffe-eau avec verification des raccordements, tests de pression et conseils d entretien. La prestation est adaptee aux appartements et maisons avec acces standard.',
-    260.00,
-    'https://images.unsplash.com/photo-1581578017093-cd30fce4eeb7?auto=format&fit=crop&w=1200&q=80',
-    5.0,
-    2,
+    45.00,
+    86,
+    '2026-03-26T14:00:00Z',
     true,
-    '2024-03-05T10:15:00Z',
+    timezone('utc', now()),
     timezone('utc', now())
   ),
   (
-    '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
+    'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
     (select id from public.service_categories where slug = 'montage-meuble'),
-    'montage-armoire-et-dressing',
-    'Montage d armoire et dressing',
-    'Assemblage complet, alignement des portes et finitions soignees.',
-    'Je monte les armoires, dressings et grands meubles en kit en respectant le plan du fabricant. La prestation inclut le controle des niveaux, l ajustement des portes et une remise en place nette de la zone de travail.',
-    210.00,
-    'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80',
-    4.9,
-    3,
+    41.85,
+    1486,
+    '2026-03-26T10:00:00Z',
     true,
-    '2024-03-19T14:00:00Z',
+    timezone('utc', now()),
     timezone('utc', now())
   ),
   (
-    '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
+    '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
     (select id from public.service_categories where slug = 'montage-meuble'),
-    'montage-bureau-et-bibliotheque',
-    'Montage de bureau et bibliotheque',
-    'Montage propre pour espaces de travail, chambres et studios.',
-    'Je monte les bureaux, etageres et bibliotheques avec ancrage simple si necessaire. Cette prestation est ideale pour les appartements et les espaces de teletravail qui demandent un montage rapide et stable.',
-    180.00,
-    'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80',
-    4.7,
-    2,
+    50.83,
+    88,
+    '2026-03-25T12:30:00Z',
     true,
-    '2024-04-02T11:45:00Z',
+    timezone('utc', now()),
     timezone('utc', now())
   ),
   (
-    '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
-    (select id from public.service_categories where slug = 'electricite'),
-    'pose-luminaire-et-petite-electricite',
-    'Pose de luminaire et petite electricite',
-    'Remplacement de luminaires, prises et interrupteurs en toute securite.',
-    'J installe les suspensions, plafonniers et appliques, ainsi que les petits remplacements de prises et interrupteurs. Chaque intervention se termine par une verification du bon fonctionnement et de la fixation.',
-    190.00,
-    'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80',
-    4.8,
-    2,
+    '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+    (select id from public.service_categories where slug = 'montage-meuble'),
+    58.30,
+    61,
+    '2026-03-29T09:30:00Z',
     true,
-    '2024-04-16T09:00:00Z',
+    timezone('utc', now()),
     timezone('utc', now())
   ),
   (
-    '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
-    (select id from public.service_categories where slug = 'peinture'),
-    'retouches-peinture-interieur',
-    'Retouches peinture interieur',
-    'Prestation brouillon en preparation pour futurs chantiers.',
-    'Cette prestation sert de brouillon pour de futures retouches peinture interieur. Elle reste masquee tant que les details definitifs et les photos chantier ne sont pas finalises.',
-    170.00,
-    'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1200&q=80',
-    0,
-    0,
-    false,
-    '2024-05-01T08:00:00Z',
+    '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+    (select id from public.service_categories where slug = 'demenagement'),
+    72.00,
+    43,
+    '2026-03-28T08:00:00Z',
+    true,
+    timezone('utc', now()),
     timezone('utc', now())
   );
 
-insert into public.service_reviews (
-  service_id,
+insert into public.provider_reviews (
+  provider_id,
+  category_id,
   author_name,
   rating,
   comment,
@@ -259,86 +522,66 @@ insert into public.service_reviews (
 )
 values
   (
-    (select id from public.provider_services where slug = 'reparation-fuite-cuisine-casablanca'),
-    'Salma B.',
-    5.0,
-    'Intervention tres rapide et propre. La fuite sous l evier a ete reglee en moins d une heure.',
-    '2025-01-12T10:30:00Z'
-  ),
-  (
-    (select id from public.provider_services where slug = 'reparation-fuite-cuisine-casablanca'),
-    'Imane R.',
-    4.5,
-    'Professionnel, ponctuel et clair sur le prix. Je referai appel a lui sans hesitation.',
-    '2025-02-03T15:00:00Z'
-  ),
-  (
-    (select id from public.provider_services where slug = 'reparation-fuite-cuisine-casablanca'),
-    'Mehdi T.',
-    5.0,
-    'Tres bon depannage et bonne explication sur ce qui a cause la fuite.',
-    '2025-02-26T18:45:00Z'
-  ),
-  (
-    (select id from public.provider_services where slug = 'installation-chauffe-eau'),
-    'Amina K.',
-    5.0,
-    'Installation impeccable et verifications faites avant de partir.',
-    '2025-01-22T13:20:00Z'
-  ),
-  (
-    (select id from public.provider_services where slug = 'installation-chauffe-eau'),
-    'Youssef H.',
-    5.0,
-    'Tres serieux, a bien explique le fonctionnement et l entretien.',
-    '2025-03-04T09:10:00Z'
-  ),
-  (
-    (select id from public.provider_services where slug = 'montage-armoire-et-dressing'),
+    '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
+    (select id from public.service_categories where slug = 'montage-meuble'),
     'Nadia F.',
     5.0,
-    'Mon dressing a ete monte parfaitement, avec des finitions tres propres.',
-    '2025-02-08T12:00:00Z'
-  ),
-  (
-    (select id from public.provider_services where slug = 'montage-armoire-et-dressing'),
-    'Hamza L.',
-    4.5,
-    'Travail soigne et meuble bien aligne. Rien a redire.',
-    '2025-02-17T17:30:00Z'
-  ),
-  (
-    (select id from public.provider_services where slug = 'montage-armoire-et-dressing'),
-    'Sara M.',
-    5.0,
-    'Efficace, poli et tres organise pendant tout le montage.',
+    'Montage impeccable, ponctuel et tres soigne du debut a la fin.',
     '2025-03-01T11:15:00Z'
   ),
   (
-    (select id from public.provider_services where slug = 'montage-bureau-et-bibliotheque'),
-    'Omar D.',
-    4.5,
-    'Le bureau et la bibliotheque ont ete montes vite et sans laisser de desordre.',
-    '2025-02-11T16:10:00Z'
+    '6f2167ad-c38f-490f-8c59-fd4f4aa71c01',
+    (select id from public.service_categories where slug = 'plomberie'),
+    'Salma B.',
+    5.0,
+    'Tres bonne communication et intervention rapide a domicile.',
+    '2025-03-09T09:20:00Z'
   ),
   (
-    (select id from public.provider_services where slug = 'montage-bureau-et-bibliotheque'),
+    'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
+    (select id from public.service_categories where slug = 'montage-meuble'),
+    'Claire M.',
+    5.0,
+    'Alban a monte mon dressing parfaitement et a laisse la piece impeccable.',
+    '2025-03-14T14:10:00Z'
+  ),
+  (
+    'c2788f77-a6b2-4ec8-88d7-d31f02c1e9a1',
+    (select id from public.service_categories where slug = 'montage-meuble'),
+    'Romain L.',
+    5.0,
+    'Tres rassurant, rapide et efficace pour plusieurs meubles Ikea.',
+    '2025-03-21T17:35:00Z'
+  ),
+  (
+    '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
+    (select id from public.service_categories where slug = 'montage-meuble'),
     'Leila A.',
     5.0,
-    'Tres pratique pour mon coin teletravail, montage nickel.',
-    '2025-03-06T08:50:00Z'
+    'Super experience, montage nickel et tres bonne energie.',
+    '2025-03-08T10:45:00Z'
   ),
   (
-    (select id from public.provider_services where slug = 'pose-luminaire-et-petite-electricite'),
-    'Karim S.',
-    5.0,
-    'Suspension bien posee, propre et rapide.',
-    '2025-02-14T14:40:00Z'
-  ),
-  (
-    (select id from public.provider_services where slug = 'pose-luminaire-et-petite-electricite'),
-    'Meriem C.',
+    '0c69ed6a-a651-4970-a099-d3b9de5ba8d2',
+    (select id from public.service_categories where slug = 'montage-meuble'),
+    'Yanis D.',
     4.5,
-    'Ponctuel et rassurant. La nouvelle applique est tres bien installee.',
-    '2025-03-09T19:05:00Z'
+    'Travail propre et soigne, je referai appel a lui.',
+    '2025-03-18T16:20:00Z'
+  ),
+  (
+    '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+    (select id from public.service_categories where slug = 'montage-meuble'),
+    'Sarah T.',
+    5.0,
+    'Hassen est arrive a l heure et a tout fixe tres proprement.',
+    '2025-03-12T13:00:00Z'
+  ),
+  (
+    '9a300bb4-6ef7-41fd-b289-2f976e455d24',
+    (select id from public.service_categories where slug = 'demenagement'),
+    'Maya K.',
+    5.0,
+    'Tres bonne aide pour porter et installer des objets lourds.',
+    '2025-03-22T09:50:00Z'
   );

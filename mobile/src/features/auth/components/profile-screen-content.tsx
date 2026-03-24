@@ -1,5 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useMutation } from '@tanstack/react-query';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MutedText, UIText } from '@/components/ui/text';
 import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
 import { ProviderServicesManager } from '@/features/services/components/provider-services-manager';
@@ -62,6 +63,7 @@ function MenuItem({ icon, label, onPress, destructive }: MenuItemProps) {
 }
 
 export function ProfileScreenContent({ onSignedOut }: ProfileScreenContentProps) {
+  const insets = useSafeAreaInsets();
   const { profile, user } = useAuthSession();
   const isProvider = profile?.role === 'provider';
 
@@ -78,8 +80,8 @@ export function ProfileScreenContent({ onSignedOut }: ProfileScreenContentProps)
   return (
     <ScrollView
       className="flex-1 bg-brand-sand"
-      contentContainerClassName="gap-6 px-5 pb-10 pt-14"
-      contentInsetAdjustmentBehavior="automatic"
+      contentContainerClassName="gap-6 px-5 pb-10"
+      contentContainerStyle={{ paddingTop: insets.top + 24 }}
     >
       <View className="items-center gap-3">
         <View className="h-20 w-20 items-center justify-center rounded-full bg-brand-clay">

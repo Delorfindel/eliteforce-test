@@ -24,7 +24,7 @@ export function useAuthSession() {
 
   const profileQuery = useQuery<ProfileRow | null>({
     enabled: Boolean(auth.user?.id),
-    queryFn: () => getProfile(auth.user?.id),
+    queryFn: () => (auth.user?.id ? getProfile(auth.user.id) : Promise.resolve(null)),
     queryKey: ['profile', auth.user?.id],
   });
 

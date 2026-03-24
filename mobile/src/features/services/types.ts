@@ -13,62 +13,72 @@ export type ProviderSummary = {
   completed_missions_count: number;
   full_name: string;
   headline: string;
+  is_elite: boolean;
+  languages: string[];
   member_since: string;
   profile_id: string;
   rating: number;
   review_count: number;
+  tools: string[];
 };
 
-export type MarketplaceServiceCard = {
-  category: ServiceCategory;
-  cover_image_url: string | null;
-  created_at: string;
-  hourly_rate: number;
-  id: number;
-  is_active: boolean;
-  provider: ProviderSummary;
-  rating: number;
-  review_count: number;
-  short_description: string;
-  slug: string;
-  title: string;
-  updated_at: string;
-};
-
-export type ServiceReview = {
+export type ProviderReview = {
   author_name: string;
+  category_id: number | null;
   comment: string;
   created_at: string;
   id: number;
   rating: number;
 };
 
-export type MarketplaceServiceDetail = MarketplaceServiceCard & {
-  description: string;
-  reviews: ServiceReview[];
-};
-
-export type ProviderServiceListItem = {
+export type TaskerSearchResult = {
   category: ServiceCategory;
-  cover_image_url: string | null;
-  description: string;
+  completed_task_count: number;
   hourly_rate: number;
   id: number;
   is_active: boolean;
-  rating: number;
-  review_count: number;
-  short_description: string;
-  slug: string;
-  title: string;
+  next_available_at: string | null;
+  provider: ProviderSummary;
+};
+
+export type TaskerProfile = TaskerSearchResult & {
+  reviews: ProviderReview[];
+};
+
+export type ProviderCategoryOfferingListItem = {
+  category: ServiceCategory;
+  completed_task_count: number;
+  hourly_rate: number;
+  id: number;
+  is_active: boolean;
+  next_available_at: string | null;
   updated_at: string;
 };
 
-export type ProviderServiceFormValues = {
+export type ProviderCategoryOfferingFormValues = {
   categoryId: number;
-  coverImageUrl: string;
-  description: string;
   hourlyRate: number;
   isActive: boolean;
-  shortDescription: string;
-  title: string;
+  nextAvailableAt: string | null;
+};
+
+export type TaskBooking = {
+  address: string;
+  address_details: string | null;
+  category: ServiceCategory;
+  created_at: string;
+  currency_code: string;
+  hourly_rate: number;
+  id: number;
+  notes: string | null;
+  payment_status: string;
+  provider: ProviderSummary;
+  scheduled_for: string;
+  status: string;
+  total_price: number;
+};
+
+export type SavedAddress = {
+  details: string;
+  label: string;
 };

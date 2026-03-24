@@ -1,12 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
-import {
-  type SearchProviderServicesInput,
-  searchProviderServices,
-} from '@/features/services/api/search-provider-services';
+import { type SearchTaskersInput, searchTaskers } from '@/features/services/api/search-taskers';
 
-export function useServicesSearch(input: SearchProviderServicesInput) {
+export function useServicesSearch(input: SearchTaskersInput) {
   const [debouncedQuery, setDebouncedQuery] = React.useState(input.query);
 
   React.useEffect(() => {
@@ -18,17 +15,18 @@ export function useServicesSearch(input: SearchProviderServicesInput) {
   return useQuery({
     placeholderData: (previousData) => previousData,
     queryFn: () =>
-      searchProviderServices({
+      searchTaskers({
         ...input,
         query: debouncedQuery,
       }),
     queryKey: [
-      'services-search',
+      'tasker-search',
       debouncedQuery,
+      input.availability,
       input.categoryId,
-      input.minPrice,
       input.maxPrice,
       input.minRating,
+      input.sortBy,
     ],
   });
 }
