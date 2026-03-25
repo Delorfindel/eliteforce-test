@@ -42,7 +42,7 @@ export async function searchTaskers(filters: SearchTaskersInput): Promise<Tasker
     .eq('is_active', true)
     .order('hourly_rate', { ascending: true });
 
-  if (filters.categoryId) {
+  if (filters.categoryId !== null) {
     query = query.eq('category_id', filters.categoryId);
   }
 
@@ -50,10 +50,12 @@ export async function searchTaskers(filters: SearchTaskersInput): Promise<Tasker
     query = query.lte('hourly_rate', filters.maxPrice);
   }
 
+  const nextWeek = new Date();
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  const nextWeekIso = nextWeek.toISOString();
+
   if (filters.availability === 'within_7_days') {
-    const nextWeek = new Date();
-    nextWeek.setDate(nextWeek.getDate() + 7);
-    query = query.lte('next_available_at', nextWeek.toISOString());
+    query = query.lte('next_available_at', nextWeekIso);
   }
 
   const { data, error } = await query;

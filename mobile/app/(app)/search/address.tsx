@@ -72,14 +72,14 @@ export default function SearchAddressRoute() {
             size={36}
           />
           <View className="flex-1 items-center">
-            <UIText className="text-[20px] font-semibold">Lieu</UIText>
+            <UIText className="text-[20px] font-semibold">Adresse</UIText>
           </View>
           <View className="w-10" />
         </View>
 
         <ScrollView
           className="flex-1"
-          contentContainerClassName="min-h-full px-5 pb-8"
+          contentContainerClassName="px-5 pb-8"
           keyboardShouldPersistTaps="handled"
         >
           <View className="mt-8 gap-6">
@@ -124,11 +124,13 @@ export default function SearchAddressRoute() {
               </View>
             </View>
           ) : null}
+        </ScrollView>
 
-          <View className="flex-1" />
-
+        <View
+          className="border-t border-brand-border bg-white px-5 pt-4"
+          style={{ paddingBottom: Math.max(insets.bottom, 24) }}
+        >
           <Button
-            className="mt-10"
             disabled={!address.trim()}
             loading={mutation.isPending}
             onPress={() => mutation.mutate()}
@@ -141,7 +143,7 @@ export default function SearchAddressRoute() {
               {mutation.error.message}
             </MutedText>
           ) : null}
-        </ScrollView>
+        </View>
       </View>
     </>
   );

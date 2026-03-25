@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { uiStorage } from '@/lib/storage';
 
-export type AvailabilityFilter = 'all' | 'within_7_days' | 'flexible';
+export type AvailabilityFilter = 'all' | 'within_7_days';
 export type SearchSort = 'recommended' | 'price_asc' | 'price_desc';
 
 export type SearchFilters = {
