@@ -18,7 +18,8 @@ Ce repository contient:
 - [8. Commandes utiles (check, format, migrations, types, tests)](#8-commandes-utiles-check-format-migrations-types-tests)
 - [9. Base de donnees et securite (RLS)](#9-base-de-donnees-et-securite-rls)
 - [10. Tests existants](#10-tests-existants)
-- [11. Limites connues de ce slice](#11-limites-connues-de-ce-slice)
+- [11. Captures d'ecran (auth, client, prestataire)](#11-captures-decran-auth-client-prestataire)
+- [12. Limites connues de ce slice](#12-limites-connues-de-ce-slice)
 
 ## 1. Vision du projet
 
@@ -333,6 +334,15 @@ Comptes de demo seeds (mot de passe commun `EliteForce123!`):
 - `juba.demo@eliteforce.local` (role provider)
 - `hassen.demo@eliteforce.local` (role provider)
 
+Identifiants des 2 comptes principaux (seed):
+
+- Client:
+  - Email: `client.demo@eliteforce.local`
+  - Mot de passe: `EliteForce123!`
+- Prestataire:
+  - Email: `prestataire.demo@eliteforce.local`
+  - Mot de passe: `EliteForce123!`
+
 Optionnel, verifier les endpoints/cles locales:
 
 ```bash
@@ -521,7 +531,58 @@ npx supabase gen types --linked > mobile/src/types/database.types.ts
   - valide indexes critiques
   - valide policies RLS owner/public selon role (`anon`, `authenticated`, provider, client)
 
-## 11. Limites connues de ce slice
+## 11. Captures d'ecran (auth, client, prestataire)
+
+Arborescence actuelle:
+
+```text
+Docs/
+└── screenshots/
+    ├── auth/
+    ├── client/
+    └── presta/
+```
+
+### 11.1 Parcours Auth
+
+![Auth - Login](Docs/screenshots/auth/auth-login.png)
+![Auth - Signup](Docs/screenshots/auth/auth-signup.png)
+![Auth - Reset Password](Docs/screenshots/auth/auth-reset.png)
+
+### 11.2 Parcours Client
+
+#### Accueil et recherche
+
+![Client - Home](Docs/screenshots/client/home.png)
+![Client - Recherche categorie](Docs/screenshots/client/recherche-categorie.png)
+![Client - Recherche confirmation](Docs/screenshots/client/recherche-confirmation.png)
+![Client - Adresse](Docs/screenshots/client/adresse.png)
+![Client - Recherche resultat](Docs/screenshots/client/recherche-resultat.png)
+![Client - Recherche filtres](Docs/screenshots/client/recherche-filtres.png)
+![Client - Recherche profil](Docs/screenshots/client/recherche-profil.png)
+
+#### Planification et booking
+
+![Client - Recherche planning](Docs/screenshots/client/recherche-planning.png)
+![Client - Recherche planning date](Docs/screenshots/client/recheche-planning-date.png)
+![Client - Booking details](Docs/screenshots/client/booking-details.png)
+![Client - Booking confirmation](Docs/screenshots/client/booking-confirmation.png)
+
+#### Reservations et profil
+
+![Client - Reservations list](Docs/screenshots/client/reservations-list.png)
+![Client - Reservations detail](Docs/screenshots/client/reservations-detail.png)
+![Client - Profil](Docs/screenshots/client/client-profil.png)
+
+### 11.3 Parcours Prestataire
+
+![Presta - Reservations list](Docs/screenshots/presta/reservations-list.png)
+![Presta - Reservations detail](Docs/screenshots/presta/reservations-detail.png)
+![Presta - Mes services](Docs/screenshots/presta/mes-services.png)
+![Presta - Ajout service](Docs/screenshots/presta/mes-services-ajout.png)
+![Presta - Profil](Docs/screenshots/presta/presta-profil.png)
+
+## 12. Limites connues de ce slice
 
 - Le bloc paiement dans `booking/confirm` est un placeholder UX (pas de PSP integre)
 - Les entrées `Parametres`, `Aide & support`, `A propos` du profil sont visuelles uniquement
