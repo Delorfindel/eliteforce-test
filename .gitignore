@@ -1,33 +1,61 @@
-# macOS
+# OS files
 .DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.iml
+*.suo
+*.swp
+*.swo
+*.orig
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # Dependencies
 node_modules/
 mobile/node_modules/
+.pnpm-store/
+.npm/
 
-# Env files
+# Environment files
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 mobile/.env
-mobile/.env.local
+mobile/.env.*
+!mobile/.env.example
 
-# Expo
+# Build / test outputs
+coverage/
+dist/
+build/
+*.tsbuildinfo
+
+# Expo / React Native
 mobile/.expo/
-mobile/dist/
-mobile/web-build/
+mobile/.expo-shared/
 mobile/.metro-health-check*
-
-# Native / build output
+mobile/web-build/
+mobile/dist/
+mobile/expo-env.d.ts
 mobile/android/
 mobile/ios/
-*.log
-coverage/
 
 # Supabase local artifacts
 supabase/.branches/
 supabase/.temp/
 supabase/.stack/
 
-# Tooling
+# Caches / tooling
 .turbo/
+.cache/
