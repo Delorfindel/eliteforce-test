@@ -545,42 +545,82 @@ Docs/
 
 ### 11.1 Parcours Auth
 
-![Auth - Login](Docs/screenshots/auth/auth-login.png)
-![Auth - Signup](Docs/screenshots/auth/auth-signup.png)
-![Auth - Reset Password](Docs/screenshots/auth/auth-reset.png)
+<table>
+  <tr>
+    <td><img src="Docs/screenshots/auth/auth-login.png" alt="Auth - Login" /></td>
+    <td><img src="Docs/screenshots/auth/auth-signup.png" alt="Auth - Signup" /></td>
+  </tr>
+  <tr>
+    <td><img src="Docs/screenshots/auth/auth-reset.png" alt="Auth - Reset Password" /></td>
+    <td></td>
+  </tr>
+</table>
 
 ### 11.2 Parcours Client
 
 #### Accueil et recherche
 
-![Client - Home](Docs/screenshots/client/home.png)
-![Client - Recherche categorie](Docs/screenshots/client/recherche-categorie.png)
-![Client - Recherche confirmation](Docs/screenshots/client/recherche-confirmation.png)
-![Client - Adresse](Docs/screenshots/client/adresse.png)
-![Client - Recherche resultat](Docs/screenshots/client/recherche-resultat.png)
-![Client - Recherche filtres](Docs/screenshots/client/recherche-filtres.png)
-![Client - Recherche profil](Docs/screenshots/client/recherche-profil.png)
+<table>
+  <tr>
+    <td><img src="Docs/screenshots/client/home.png" alt="Client - Home" /></td>
+    <td><img src="Docs/screenshots/client/recherche-categorie.png" alt="Client - Recherche categorie" /></td>
+  </tr>
+  <tr>
+    <td><img src="Docs/screenshots/client/recherche-confirmation.png" alt="Client - Recherche confirmation" /></td>
+    <td><img src="Docs/screenshots/client/adresse.png" alt="Client - Adresse" /></td>
+  </tr>
+  <tr>
+    <td><img src="Docs/screenshots/client/recherche-resultat.png" alt="Client - Recherche resultat" /></td>
+    <td><img src="Docs/screenshots/client/recherche-filtres.png" alt="Client - Recherche filtres" /></td>
+  </tr>
+  <tr>
+    <td><img src="Docs/screenshots/client/recherche-profil.png" alt="Client - Recherche profil" /></td>
+    <td></td>
+  </tr>
+</table>
 
 #### Planification et booking
 
-![Client - Recherche planning](Docs/screenshots/client/recherche-planning.png)
-![Client - Recherche planning date](Docs/screenshots/client/recheche-planning-date.png)
-![Client - Booking details](Docs/screenshots/client/booking-details.png)
-![Client - Booking confirmation](Docs/screenshots/client/booking-confirmation.png)
+<table>
+  <tr>
+    <td><img src="Docs/screenshots/client/recherche-planning.png" alt="Client - Recherche planning" /></td>
+    <td><img src="Docs/screenshots/client/recheche-planning-date.png" alt="Client - Recherche planning date" /></td>
+  </tr>
+  <tr>
+    <td><img src="Docs/screenshots/client/booking-details.png" alt="Client - Booking details" /></td>
+    <td><img src="Docs/screenshots/client/booking-confirmation.png" alt="Client - Booking confirmation" /></td>
+  </tr>
+</table>
 
 #### Reservations et profil
 
-![Client - Reservations list](Docs/screenshots/client/reservations-list.png)
-![Client - Reservations detail](Docs/screenshots/client/reservations-detail.png)
-![Client - Profil](Docs/screenshots/client/client-profil.png)
+<table>
+  <tr>
+    <td><img src="Docs/screenshots/client/reservations-list.png" alt="Client - Reservations list" /></td>
+    <td><img src="Docs/screenshots/client/reservations-detail.png" alt="Client - Reservations detail" /></td>
+  </tr>
+  <tr>
+    <td><img src="Docs/screenshots/client/client-profil.png" alt="Client - Profil" /></td>
+    <td></td>
+  </tr>
+</table>
 
 ### 11.3 Parcours Prestataire
 
-![Presta - Reservations list](Docs/screenshots/presta/reservations-list.png)
-![Presta - Reservations detail](Docs/screenshots/presta/reservations-detail.png)
-![Presta - Mes services](Docs/screenshots/presta/mes-services.png)
-![Presta - Ajout service](Docs/screenshots/presta/mes-services-ajout.png)
-![Presta - Profil](Docs/screenshots/presta/presta-profil.png)
+<table>
+  <tr>
+    <td><img src="Docs/screenshots/presta/reservations-list.png" alt="Presta - Reservations list" /></td>
+    <td><img src="Docs/screenshots/presta/reservations-detail.png" alt="Presta - Reservations detail" /></td>
+  </tr>
+  <tr>
+    <td><img src="Docs/screenshots/presta/mes-services.png" alt="Presta - Mes services" /></td>
+    <td><img src="Docs/screenshots/presta/mes-services-ajout.png" alt="Presta - Ajout service" /></td>
+  </tr>
+  <tr>
+    <td><img src="Docs/screenshots/presta/presta-profil.png" alt="Presta - Profil" /></td>
+    <td></td>
+  </tr>
+</table>
 
 ## 12. Limites connues de ce slice
 
