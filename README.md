@@ -15,7 +15,7 @@ Ce repository contient:
 - [5. Prerequis](#5-prerequis)
 - [6. Installation et configuration](#6-installation-et-configuration)
 - [7. Lancer le projet localement](#7-lancer-le-projet-localement)
-- [8. Commandes utiles (check, format, migrations, types, tests)](#8-commandes-utiles-check-format-migrations-types-tests)
+- [8. Commandes utiles (check, format, migrations, types, tests, swagger)](#8-commandes-utiles-check-format-migrations-types-tests-swagger)
 - [9. Base de donnees et securite (RLS)](#9-base-de-donnees-et-securite-rls)
 - [10. Tests existants](#10-tests-existants)
 - [11. Captures d'ecran (auth, client, prestataire)](#11-captures-decran-auth-client-prestataire)
@@ -363,7 +363,7 @@ Alternative depuis la racine:
 npm --prefix mobile run ios
 ```
 
-## 8. Commandes utiles (check, format, migrations, types, tests)
+## 8. Commandes utiles (check, format, migrations, types, tests, swagger)
 
 ### 8.1 Commandes npm deja preconfigurees
 
@@ -379,6 +379,8 @@ npm run supabase:stop         # stop stack local
 npm run supabase:reset        # reset db locale + migrations + seed
 npm run supabase:types        # regenere mobile/src/types/database.types.ts depuis la DB locale
 npm run supabase:test:rls     # execute supabase/tests/rls.sql
+npm run supabase:openapi      # genere Docs/swagger/supabase-openapi.json depuis PostgREST
+npm run supabase:swagger      # genere la spec puis lance Swagger UI local
 ```
 
 Depuis `mobile/`:
@@ -487,6 +489,29 @@ npx supabase migration list
 npx supabase db pull
 npx supabase gen types --linked > mobile/src/types/database.types.ts
 ```
+
+### 8.6 Documenter les APIs Supabase avec Swagger
+
+Pre-requis:
+- stack Supabase locale demarree (`npm run supabase:start`)
+
+Generer uniquement la spec OpenAPI:
+
+```bash
+npm run supabase:openapi
+```
+
+Lancer Swagger UI (generation + serveur local):
+
+```bash
+npm run supabase:swagger
+```
+
+Sorties:
+- spec JSON: `Docs/swagger/supabase-openapi.json`
+- interface Swagger: `http://127.0.0.1:8086`
+
+La spec recuperee depuis `rest/v1` couvre les endpoints REST PostgREST (tables/vues) et les endpoints `rpc/*` exposes pour la cle utilisee.
 
 ## 9. Base de donnees et securite (RLS)
 

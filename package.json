@@ -10,7 +10,10 @@
     "supabase:stop": "npx supabase stop",
     "supabase:reset": "npx supabase db reset",
     "supabase:types": "npx supabase gen types typescript --local > mobile/src/types/database.types.ts",
-    "supabase:test:rls": "psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -v ON_ERROR_STOP=1 -f supabase/tests/rls.sql"
+    "supabase:test:rls": "psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -v ON_ERROR_STOP=1 -f supabase/tests/rls.sql",
+    "supabase:openapi": "node scripts/supabase-swagger/generate-openapi.mjs",
+    "supabase:swagger:serve": "node scripts/supabase-swagger/serve-swagger.mjs",
+    "supabase:swagger": "npm run supabase:openapi && npm run supabase:swagger:serve --"
   },
   "devDependencies": {
     "supabase": "2.83.0"
