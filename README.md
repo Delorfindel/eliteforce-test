@@ -20,6 +20,7 @@ Ce repository contient:
 - [10. Tests existants](#10-tests-existants)
 - [11. Captures d'ecran (auth, client, prestataire)](#11-captures-decran-auth-client-prestataire)
 - [12. Limites connues de ce slice](#12-limites-connues-de-ce-slice)
+- [13. Extra Skills](#13-extra-skills)
 
 ## 1. Vision du projet
 
@@ -652,3 +653,31 @@ Docs/
 - Le bloc paiement dans `booking/confirm` est un placeholder UX (pas de PSP integre)
 - Les entrées `Parametres`, `Aide & support`, `A propos` du profil sont visuelles uniquement
 - Le scope actuel couvre reservation + notation client, pas un moteur complet d'orchestration ops
+
+## 13. Extra Skills
+
+### 13.1 IA et ecosysteme LLM
+
+- Veille continue sur les modeles IA, leurs couts, leurs avantages et leurs limites pour orienter les choix techniques selon le use case.
+- Bonne maitrise des strategies d'ingestion de donnees (dont le RAG) et des patterns de structuration de la data pour des modules IA exploitables en production.
+- Capacite a manipuler des bases vectorielles utilisees dans les pipelines IA (indexation, recherche semantique, qualite de retrieval).
+- Utilisation d'outils d'automatisation comme `n8n` pour orchestrer des workflows et des agents IA.
+
+### 13.2 Systeme, versionning et securite applicative
+
+- Sur ce projet, une partie importante de l'infra et de la securite est couverte par Supabase (RLS pour le controle d'acces et hosting managed).
+- Maitrise des workflows Git de deploiement (branches de dev, staging, production) pour un delivery propre et testable.
+- Le code actuel applique deja des garde-fous solides: checks d'ownership, controles de droits et validations metier critiques.
+- Experience sur l'integration de paiements (ex: Stripe), avec une bonne connaissance des bad patterns a eviter et des points de vigilance securite.
+- Utilisation d'agents IA specialises pour faire des reviews critiques en plusieurs passes (securite, performance, optimisation).
+
+Positionnement: profil full-stack integrateur (et non specialiste DevOps/SecOps pur), capable de livrer une plateforme de production robuste et suffisamment safe.
+
+### 13.3 Compliance, RGPD et adaptation locale
+
+- Experience concrete sur les sujets compliance (RGPD): suppression de compte, conservation/suppression de donnees, anonymisation, tracking et gouvernance des donnees utilisateur.
+- Connaissance des principaux outils et pratiques de tracking, avec attention sur la minimisation et l'usage legitime de la data.
+- Habitude de travailler dans des contextes a forte sensibilite data (startup et grandes structures), avec contraintes legales et auditabilite.
+- Si un cadre local specifique est requis (ex: Maroc), capacite a monter rapidement en competence, auditer l'existant et adapter l'implementation aux exigences locales.
+
+Si certains points necessitent un approfondissement, la demarche reste la meme: apprendre vite, auditer de facon critique et s'adapter aux requirements du projet et du pays cible.
